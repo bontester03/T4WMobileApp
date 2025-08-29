@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             Shell.NavBarIsVisible="False"
+             x:Class="T4sV1.LoginPage"          
+             BackgroundColor="#F5F5F5">
+
+    <Grid>
+        <!-- Background Image -->
+        <Image Source="background.jpg"
+               Aspect="AspectFill"
+               Opacity="0.25"
+               IsVisible="True"
+               ZIndex="0" />
+
+        <!-- Foreground -->
+        <ScrollView>
+            <VerticalStackLayout Padding="30,60" Spacing="30" ZIndex="1">
+
+                <!-- Logo -->
+                <Image Source="t4slogo.jpg"
+                       HeightRequest="90"
+                       HorizontalOptions="Center"
+                       Aspect="AspectFit"
+                       SemanticProperties.Description="Time4Sport Logo" />
+
+                <!-- Email -->
+                <Frame CornerRadius="25"
+                       HeightRequest="60"
+                       Padding="10"
+                       BackgroundColor="White"
+                       BorderColor="LightGray"
+                       HasShadow="True">
+                    <Entry x:Name="emailEntry"
+                           Placeholder="Email address"
+                           FontSize="16"
+                           Keyboard="Email"
+                           TextColor="Black"
+                           BackgroundColor="Transparent"
+                           VerticalOptions="Center"
+                           HorizontalOptions="FillAndExpand">
+                        <Entry.Behaviors>
+                            <toolkit:EmailValidationBehavior InvalidStyle="{StaticResource InvalidEntryStyle}" />
+                        </Entry.Behaviors>
+                    </Entry>
+                </Frame>
+
+                <!-- Password -->
+                <Frame CornerRadius="25"
+                       HeightRequest="60"
+                       Padding="10"
+                       BackgroundColor="White"
+                       BorderColor="LightGray"
+                       HasShadow="True">
+                    <Entry x:Name="passwordEntry"
+                           Placeholder="Password"
+                           IsPassword="True"
+                           FontSize="16"
+                           TextColor="Black"
+                           BackgroundColor="Transparent"
+                           VerticalOptions="Center"
+                           HorizontalOptions="FillAndExpand" />
+                </Frame>
+
+                <!-- Login Button -->
+                <Button Text="Login"
+                        BackgroundColor="#4CAF50"
+                        TextColor="White"
+                        FontSize="Medium"
+                        CornerRadius="10"
+                        Clicked="OnLoginClicked" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

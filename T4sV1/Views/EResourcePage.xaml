@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="T4sV1.Views.EResourcePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:sfexpander="clr-namespace:Syncfusion.Maui.Expander;assembly=Syncfusion.Maui.Expander"
+    BackgroundColor="Transparent"
+    Title="E-Resources">
+
+    <ScrollView>
+        <ScrollView.Background>
+            <!-- StartPoint defaults to (0,0) -->
+            <LinearGradientBrush EndPoint="0,1">
+                <GradientStop Color="#e9fdb6" Offset="0.1" />
+                <GradientStop Color="#9dc052" Offset="1.0" />
+            </LinearGradientBrush>
+        </ScrollView.Background>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <!-- Header -->
+            <Label Text="🎥 E-Resources"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   TextColor="#2C3E50"
+                   HorizontalOptions="Center" />
+
+            <WebView x:Name="VideoPlayer" HeightRequest="300" IsVisible="False" />
+            <!-- Accordion with hardcoded categories -->
+            <sfexpander:SfExpander Collapsing="OnExpanderCollapsing">
+                <sfexpander:SfExpander.Header>
+                    <Label Text="Wellbeing" FontSize="18" FontAttributes="Bold" TextColor="#2C3E50" />
+                </sfexpander:SfExpander.Header>
+                <sfexpander:SfExpander.Content>
+                    <VerticalStackLayout Spacing="10">
+                        <Button Text="▶ 5 Ways to Wellbeing" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/WHcLb0h9FmI" />
+                        <Button Text="▶ Overcoming Barriers Part 1" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/acxBR2K6dhs" />
+                        <Button Text="▶ Overcoming Barriers Part 2" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/KUHWjclsHjo" />
+                    </VerticalStackLayout>
+                </sfexpander:SfExpander.Content>
+            </sfexpander:SfExpander>
+
+            <!-- Challenges Category -->
+            <sfexpander:SfExpander Collapsing="OnExpanderCollapsing">
+                <sfexpander:SfExpander.Header>
+                    <Label Text="Challenges" FontSize="18" FontAttributes="Bold" TextColor="#2C3E50" />
+                </sfexpander:SfExpander.Header>
+                <sfexpander:SfExpander.Content>
+                    <VerticalStackLayout Spacing="10">
+                        <Button Text="▶ Folding Towel Challenge" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/N8xhLIXOaFQ" />
+                        <Button Text="▶ Bottle Flip Challenge" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/KV681XB1DOo" />
+                        <Button Text="▶ Launch Pad Challenge" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/cgZvgESF3c8" />
+                        <Button Text="▶ Paper in a Cup Challenge" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/yeCfbqKHxcg" />
+                        <Button Text="▶ Sit Up Challenge" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/b73F9uRzSEY" />
+                        <Button Text="▶ Indoor Golf Challenge" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/MyoIqVxdNO0" />
+                        <Button Text="▶ Juggling Challenge" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/7ZprS1uFrO4" />
+                        <Button Text="▶ The Teddy Bear Challenge" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/2kuzrHS5Isc" />
+                        <Button Text="▶ ABC Pushup Challenge" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/mPK6N15gXRs" />
+                        <Button Text="▶ Blind Throw Challenge" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/g31NUIYfj6s" />
+                        <Button Text="▶ The Valentines Challenge" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/fhp3LaQt8nw" />
+                        <Button Text="▶ The Book Balance Challenge" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/p6fmtNgNJC8" />
+                        <Button Text="▶ Kick The Cup Challenge" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/r4peK3gNK3s" />
+                        <Button Text="▶ Take The Bins Out Challenge" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/o8jRsCBFpkE" />
+                        <Button Text="▶ Catch The Paper Challenge" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/cOYAf_4u7lU" />
+                        <Button Text="▶ Skater Challenge" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/aJO-DrPnJDg" />
+                        <Button Text="▶ The Snowman Challenge" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/oUIDkEY_OwI" />
+                        <Button Text="▶ Unlock Your Phone Challenge" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/8oA_uDdH5EA" />
+                    </VerticalStackLayout>
+                </sfexpander:SfExpander.Content>
+            </sfexpander:SfExpander>
+
+            <!-- Physical Activity -->
+            <sfexpander:SfExpander Collapsing="OnExpanderCollapsing">
+                <sfexpander:SfExpander.Header>
+                    <Label Text="Physical Activity" FontSize="18" FontAttributes="Bold" TextColor="#2C3E50" />
+                </sfexpander:SfExpander.Header>
+                <sfexpander:SfExpander.Content>
+                    <VerticalStackLayout Spacing="10">
+                        <Button Text="▶ How Active Have You Been?" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/nTrfGo3sIiU" />
+                    </VerticalStackLayout>
+                </sfexpander:SfExpander.Content>
+            </sfexpander:SfExpander>
+
+            <!-- Fats and Sugars -->
+            <sfexpander:SfExpander Collapsing="OnExpanderCollapsing">
+                <sfexpander:SfExpander.Header>
+                    <Label Text="Fats and Sugars" FontSize="18" FontAttributes="Bold" TextColor="#2C3E50" />
+                </sfexpander:SfExpander.Header>
+                <sfexpander:SfExpander.Content>
+                    <VerticalStackLayout Spacing="10">
+                        <Button Text="▶ Fats and Sugars Part 1" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/R0O51IUtmH4" />
+                        <Button Text="▶ Fats and Sugars Part 2" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/LheFxCohPdc" />
+                        <Button Text="▶ Fats and Sugars Part 3" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/4hMzjDuodG8" />
+                        <Button Text="▶ Fats and Sugars Part 4" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/fEr6ce9gHNs" />
+                    </VerticalStackLayout>
+                </sfexpander:SfExpander.Content>
+            </sfexpander:SfExpander>
+
+            <!-- Portion Sizes -->
+            <sfexpander:SfExpander Collapsing="OnExpanderCollapsing">
+                <sfexpander:SfExpander.Header>
+                    <Label Text="Portion Sizes" FontSize="18" FontAttributes="Bold" TextColor="#2C3E50" />
+                </sfexpander:SfExpander.Header>
+                <sfexpander:SfExpander.Content>
+                    <VerticalStackLayout Spacing="10">
+                        <Button Text="▶ Portion Sizes Part 1" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/s2_qjyVwE8U" />
+                        <Button Text="▶ Portion Sizes Part 2" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/9eTx9gpQNEU" />
+                    </VerticalStackLayout>
+                </sfexpander:SfExpander.Content>
+            </sfexpander:SfExpander>
+
+            <!-- Triggers -->
+            <sfexpander:SfExpander Collapsing="OnExpanderCollapsing">
+                <sfexpander:SfExpander.Header>
+                    <Label Text="Triggers" FontSize="18" FontAttributes="Bold" TextColor="#2C3E50" />
+                </sfexpander:SfExpander.Header>
+                <sfexpander:SfExpander.Content>
+                    <VerticalStackLayout Spacing="10">
+                        <Button Text="▶ What is a Trigger" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/QSHFBKcrdcw" />
+                    </VerticalStackLayout>
+                </sfexpander:SfExpander.Content>
+            </sfexpander:SfExpander>
+
+            <!-- Unhealthy Snacks -->
+            <sfexpander:SfExpander Collapsing="OnExpanderCollapsing">
+                <sfexpander:SfExpander.Header>
+                    <Label Text="Unhealthy Snacks" FontSize="18" FontAttributes="Bold" TextColor="#2C3E50" />
+                </sfexpander:SfExpander.Header>
+                <sfexpander:SfExpander.Content>
+                    <VerticalStackLayout Spacing="10">
+                        <Button Text="▶ Reduce Unhealthy Snacks" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/-rTCF4tGBzQ" />
+                        <Button Text="▶ Dealing With Cravings" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/mdCIuvNCTWQ" />
+                    </VerticalStackLayout>
+                </sfexpander:SfExpander.Content>
+            </sfexpander:SfExpander>
+
+            <!-- Screen Time -->
+            <sfexpander:SfExpander Collapsing="OnExpanderCollapsing">
+                <sfexpander:SfExpander.Header>
+                    <Label Text="Screen Time" FontSize="18" FontAttributes="Bold" TextColor="#2C3E50" />
+                </sfexpander:SfExpander.Header>
+                <sfexpander:SfExpander.Content>
+                    <VerticalStackLayout Spacing="10">
+                        <Button Text="▶ Reduce Screen Time" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/ZtLi13JczUU" />
+                    </VerticalStackLayout>
+                </sfexpander:SfExpander.Content>
+            </sfexpander:SfExpander>
+
+            <!-- Breakfast -->
+            <sfexpander:SfExpander Collapsing="OnExpanderCollapsing">
+                <sfexpander:SfExpander.Header>
+                    <Label Text="Breakfast" FontSize="18" FontAttributes="Bold" TextColor="#2C3E50" />
+                </sfexpander:SfExpander.Header>
+                <sfexpander:SfExpander.Content>
+                    <VerticalStackLayout Spacing="10">
+                        <Button Text="▶ Breakfast Days" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/7JYkJ-rGxiQ" />
+                    </VerticalStackLayout>
+                </sfexpander:SfExpander.Content>
+            </sfexpander:SfExpander>
+
+            <!-- Healthy Snacks -->
+            <sfexpander:SfExpander Collapsing="OnExpanderCollapsing">
+                <sfexpander:SfExpander.Header>
+                    <Label Text="Healthy Snacks" FontSize="18" FontAttributes="Bold" TextColor="#2C3E50" />
+                </sfexpander:SfExpander.Header>
+                <sfexpander:SfExpander.Content>
+                    <VerticalStackLayout Spacing="10">
+                        <Button Text="▶ Barriers Rewards" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/6oUm7PlRgck" />
+                        <Button Text="▶ Healthy Eating On A Budget Part 1" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/Ti6A09ZkDRM" />
+                        <Button Text="▶ Healthy Eating On A Budget Part 2" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/A4KOUxcp3Xg" />
+                        <Button Text="▶ Health By Numbers" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/4rAsZgtm7Ik" />
+                        <Button Text="▶ Healthy Eating Recipes Dinner" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/569DMNEpHOk" />
+                        <Button Text="▶ Healthy Eating Recipes Lunch" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/j4RFxo1sXbU" />
+                        <Button Text="▶ Healthy Eating Recipes Breakfast" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/xc_PQU3bu60" />
+                    </VerticalStackLayout>
+                </sfexpander:SfExpander.Content>
+            </sfexpander:SfExpander>
+
+            <!-- Other Resources -->
+            <sfexpander:SfExpander Collapsing="OnExpanderCollapsing">
+                <sfexpander:SfExpander.Header>
+                    <Label Text="Other Resources" FontSize="18" FontAttributes="Bold" TextColor="#2C3E50" />
+                </sfexpander:SfExpander.Header>
+                <sfexpander:SfExpander.Content>
+                    <VerticalStackLayout Spacing="10">
+                        <Button Text="▶ Making Sense Of Labels" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/NRkmaL7mULE" />
+                        <Button Text="▶ Slow and Fast Release Foods" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/i5MYGMQMtHw" />
+                        <Button Text="▶ Party Time and Takeouts" Clicked="OnVideoClicked" CommandParameter="https://www.youtube.com/embed/2eM9QIGtWQo" />
+                    </VerticalStackLayout>
+                </sfexpander:SfExpander.Content>
+            </sfexpander:SfExpander>
+            <!-- WebView for video playback -->
+          
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

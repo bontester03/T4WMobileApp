@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="T4sV1.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:T4sV1.Views"
+    xmlns:local="clr-namespace:T4sV1"
+    Shell.FlyoutBehavior="Disabled"
+    Shell.BackgroundColor="#e9fdb6"
+    Shell.NavBarHasShadow="False"
+    Shell.TitleColor="Black"
+    Title="T4sV1">
+
+
+    <!-- Login (outside TabBar) -->
+    <ShellContent Route="login"
+               ContentTemplate="{DataTemplate local:LoginPage}" 
+               IsVisible="False" />
+
+
+    <!-- ✅ Add here -->
+    <ShellContent Route="healthscore"
+                  ContentTemplate="{DataTemplate views:HealthScorePage}"
+                  IsVisible="False" />
+
+    <ShellContent Route="measurements"
+              ContentTemplate="{DataTemplate views:WeeklyMeasurementsPage}"
+              IsVisible="False" />
+
+    <!-- Bottom Tab Bar -->
+    <TabBar>
+        <ShellContent Title="Home"
+            Route="dashboard" 
+          
+            ContentTemplate="{DataTemplate views:DashboardPage}"/>
+
+        <ShellContent Title="E-Resource"
+                      
+                      ContentTemplate="{DataTemplate views:EResourcePage}" />
+
+        <ShellContent Title="Notifications"
+                    
+                      ContentTemplate="{DataTemplate views:NotificationsPage}" />
+
+        <ShellContent Title="Profile"
+                   
+                      ContentTemplate="{DataTemplate views:ProfilePage}" />
+    </TabBar>
+
+
+</Shell>
