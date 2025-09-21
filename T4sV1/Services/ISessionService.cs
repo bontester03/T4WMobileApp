@@ -8,11 +8,16 @@ namespace T4sV1.Services
 {
     public interface ISessionService
     {
-        string UserId { get; set; }
-        string Email { get; set; }
+        string? UserId { get; set; }
+        string? Email { get; set; }
 
-        void LoadFromPreferences();
+        // NEW
+        int? ActiveChildId { get; set; }
+
         void SaveToPreferences();
+        void LoadFromPreferences();
+
         void Clear();
     }
+
 }

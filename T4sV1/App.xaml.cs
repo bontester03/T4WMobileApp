@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using T4sV1.Services;
 using Syncfusion.Licensing;
 using System.ComponentModel;
+using Microsoft.Extensions.DependencyInjection; // <-- add this
 
 
 namespace T4sV1
@@ -24,7 +25,8 @@ namespace T4sV1
             var session = ServiceProvider.GetRequiredService<ISessionService>();
             session.LoadFromPreferences();
 
-            MainPage = new LoginPage(session);
+            // ✅ NEW:
+            MainPage = ServiceProvider.GetRequiredService<LoginPage>();
         }
     }
 }

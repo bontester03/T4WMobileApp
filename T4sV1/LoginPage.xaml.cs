@@ -1,17 +1,21 @@
-﻿using System.Text;
+﻿using Microsoft.Maui.Storage;
 using System.Text.Json;
-using T4sV1.Model;
-using T4sV1.Services;
+using T4sV1.Model;            // your ISessionService lives here (from your code)
+using T4sV1.Services;          // IAuthService
+using T4sV1.Services.Security;
 
 namespace T4sV1;
 
 public partial class LoginPage : ContentPage
 {
+    private readonly IAuthService _auth;
     private readonly ISessionService _session;
+    private bool _isBusy;
 
-    public LoginPage(ISessionService session)
+    public LoginPage(IAuthService auth, ISessionService session)
     {
         InitializeComponent();
+        _auth = auth;
         _session = session;
     }
 
@@ -21,11 +25,13 @@ public partial class LoginPage : ContentPage
         Shell.SetNavBarIsVisible(this, false);
     }
 
-
+    // Prefer commands with async Task, but keeping your signature for now
     private async void OnLoginClicked(object sender, EventArgs e)
     {
-        string email = emailEntry.Text;
-        string password = passwordEntry.Text;
+        if (_isBusy) return;
+
+        var email = emailEntry?.Text?.Trim() ?? string.Empty;
+        var password = passwordEntry?.Text ?? string.Empty;
 
         if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
         {
@@ -33,70 +39,53 @@ public partial class LoginPage : ContentPage
             return;
         }
 
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(20));
+        _isBusy = true;
         try
         {
-            var loginDto = new LoginRequestDto
-            {
-                Email = email,
-                Password = password
-            };
+            if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+                throw new InvalidOperationException("No internet connection.");
 
-            var json = JsonSerializer.Serialize(loginDto);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var result = await _auth.LoginAsync(email, password, cts.Token);
 
-            using var client = new HttpClient();
+            if (result == null)
+                throw new InvalidOperationException("Login failed: empty response from server.");
 
-            // Local testing:
-            //var response = await client.PostAsync("http://10.0.2.2:5206/api/ApiAuth/login", content);
+            // Validate the fields your API guarantees
+            if (string.IsNullOrWhiteSpace(result.Id) || string.IsNullOrWhiteSpace(result.Email))
+                throw new InvalidOperationException("Login failed: invalid credentials or incomplete response.");
 
-            //var response = await client.PostAsync("http://192.168.1.164:5206/api/ApiAuth/login", content);
-
-            // Live server:
-           var response = await client.PostAsync("https://time4wellbeing.azurewebsites.net/api/ApiAuth/login", content);
-            //var response = await client.PostAsync("api/ApiAuth/login", content);
-
-
-            var responseBody = await response.Content.ReadAsStringAsync();
-
-            Console.WriteLine($"Status: {response.StatusCode}");
-            Console.WriteLine($"Raw Response: {responseBody}");
-
-            if (!response.IsSuccessStatusCode)
-            {
-
-                await DisplayAlert("Login Failed", $"Server says: {responseBody}", "OK");
-                return;
-            }
-
-            var user = JsonSerializer.Deserialize<LoginResponseDto>(responseBody, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
-
-            if (user == null || user.UserId == 0)
-            {
-                await DisplayAlert("Login Error", "User object is null or invalid.", "OK");
-                return;
-            }
-            Application.Current.MainPage = new AppShell(); // ✅ Now use Shell and full nav
-
-            await DisplayAlert("Success", $"Welcome {user.Email}", "OK");
-            await SecureStorage.Default.SetAsync("UserId", user.UserId.ToString());
-            _session.UserId = user.UserId.ToString();
-            _session.Email = user.Email;
+            _session.UserId = result.Id;
+            _session.Email = result.Email;
             _session.SaveToPreferences();
 
+            try { await SecureStorage.Default.SetAsync("UserId", result.Id); }
+            catch (Exception sse) { System.Diagnostics.Debug.WriteLine($"SecureStorage failed: {sse.Message}"); }
 
-
-            // ✅ Since you're still in LoginPage (not AppShell), switch MainPage here:
             Application.Current.MainPage = new AppShell();
-
-            
+            await DisplayAlert("Success", $"Welcome {result.Email}", "OK");
+        }
+        catch (TaskCanceledException)
+        {
+            await DisplayAlert("Timeout", "The server didn’t respond in time. Please try again.", "OK");
+        }
+        catch (HttpRequestException ex)
+        {
+            await DisplayAlert("Network error", $"Could not reach the server.\n{ex.Message}", "OK");
+        }
+        catch (JsonException jex)
+        {
+            await DisplayAlert("Parse error", $"Unexpected server response.\n{jex.Message}", "OK");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception: {ex}");
-            await DisplayAlert("Connection Error", ex.Message, "OK");
+            await DisplayAlert("Login error", ex.Message, "OK");
+        }
+        finally
+        {
+            _isBusy = false;
         }
     }
+
+
 }

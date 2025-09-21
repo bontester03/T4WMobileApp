@@ -3,9 +3,19 @@
     x:Class="T4sV1.Views.HomePage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-
     Title="Home">
-    <StackLayout Padding="20">
-        <Label Text="Welcome to the Home Page!" FontSize="24" HorizontalOptions="Center" />
-    </StackLayout>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Logout" Clicked="OnLogoutClicked" />
+        <ToolbarItem Text="Active Child" Clicked="OnSelectActiveChildClicked" />
+    </ContentPage.ToolbarItems>
+
+    <Grid Padding="16">
+        <!-- your existing home content -->
+
+        <Button
+            Margin="0,16,0,0"
+            Text="Select Active Child"
+            Clicked="OnSelectActiveChildClicked" />
+    </Grid>
 </ContentPage>

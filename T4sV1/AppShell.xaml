@@ -19,32 +19,38 @@
 
 
     <!-- ✅ Add here -->
-    <ShellContent Route="healthscore"
+    <!--<ShellContent Route="healthscore"
                   ContentTemplate="{DataTemplate views:HealthScorePage}"
                   IsVisible="False" />
 
     <ShellContent Route="measurements"
               ContentTemplate="{DataTemplate views:WeeklyMeasurementsPage}"
-              IsVisible="False" />
+              IsVisible="False" />-->
 
     <!-- Bottom Tab Bar -->
     <TabBar>
+
+        <ShellContent
+      Title="Active Child"
+      Route="active-child"
+      ContentTemplate="{DataTemplate views:SelectActiveChildPage}" />
+
         <ShellContent Title="Home"
             Route="dashboard" 
           
-            ContentTemplate="{DataTemplate views:DashboardPage}"/>
+            ContentTemplate="{DataTemplate views:HomePage}"/>
 
         <ShellContent Title="E-Resource"
                       
                       ContentTemplate="{DataTemplate views:EResourcePage}" />
 
-        <ShellContent Title="Notifications"
+        <!--<ShellContent Title="Notifications"
                     
                       ContentTemplate="{DataTemplate views:NotificationsPage}" />
 
         <ShellContent Title="Profile"
                    
-                      ContentTemplate="{DataTemplate views:ProfilePage}" />
+                      ContentTemplate="{DataTemplate views:ProfilePage}" />-->
     </TabBar>
 
 

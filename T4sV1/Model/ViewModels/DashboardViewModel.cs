@@ -21,7 +21,7 @@ namespace T4sV1.Model.ViewModels
         public ObservableCollection<TimelineActivityDto> Activities { get; set; } = new();
         public ObservableCollection<MeasurementDto> Measurements { get; set; } = new();
         public ObservableCollection<HealthScoreDto> HealthScores { get; set; } = new();
-        public ObservableCollection<ChildDto> Children { get; set; } = new();
+        //public ObservableCollection<ChildDto> Children { get; set; } = new();
 
 
         public event PropertyChangedEventHandler PropertyChanged;
