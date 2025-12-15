@@ -13,10 +13,14 @@ namespace T4sV1
            
             //// Optional but ensures the route is globally known
             //Routing.RegisterRoute("dashboard", typeof(T4sV1.Views.DashboardPage));
-            Routing.RegisterRoute("home", typeof(T4sV1.Views.HomePage));
+            Routing.RegisterRoute("home", typeof(T4sV1.Views.Homepage));
             //Routing.RegisterRoute("healthscore", typeof(HealthScorePage));
             //Routing.RegisterRoute("measurements", typeof(WeeklyMeasurementsPage));
 
+            Routing.RegisterRoute("ParentDashboard", typeof(ParentDashboardPage));
+            Routing.RegisterRoute("Profile", typeof(ProfilePage));         
+            Routing.RegisterRoute("HealthScore", typeof(HealthScorePage));
+            Routing.RegisterRoute("Measurement", typeof(MeasurementPage));
 
         }
 

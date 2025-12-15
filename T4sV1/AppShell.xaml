@@ -31,26 +31,24 @@
     <TabBar>
 
         <ShellContent
-      Title="Active Child"
-      Route="active-child"
-      ContentTemplate="{DataTemplate views:SelectActiveChildPage}" />
+            Title="Home"
+            Icon="home.png"
+            Route="HomePage"
+            ContentTemplate="{DataTemplate views:Homepage}" />
 
-        <ShellContent Title="Home"
-            Route="dashboard" 
-          
-            ContentTemplate="{DataTemplate views:HomePage}"/>
-
-        <ShellContent Title="E-Resource"
-                      
-                      ContentTemplate="{DataTemplate views:EResourcePage}" />
-
-        <!--<ShellContent Title="Notifications"
-                    
-                      ContentTemplate="{DataTemplate views:NotificationsPage}" />
-
-        <ShellContent Title="Profile"
-                   
-                      ContentTemplate="{DataTemplate views:ProfilePage}" />-->
+        <!-- Select Active Child Tab -->
+        <ShellContent
+            Title="Children"
+            Icon="dotnet_bot.png"
+            Route="ActiveChildPage"
+            ContentTemplate="{DataTemplate views:SelectActiveChildPage}" />
+ 
+        <!-- Resources Tab -->
+        <ShellContent
+            Title="Resources"
+            Icon="play_circle.png"
+            Route="ResourcesPage"
+            ContentTemplate="{DataTemplate views:EResourcePage}" />
     </TabBar>
 
 

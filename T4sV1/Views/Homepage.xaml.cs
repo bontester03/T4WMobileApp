@@ -1,48 +1,89 @@
-using T4sV1.Services;
-using T4sV1.Services.Security;
+using T4sV1.Model.ViewModels;
+
 namespace T4sV1.Views;
 
-public partial class HomePage : ContentPage
+public partial class Homepage : ContentPage
 {
-    private readonly IAuthService _auth;
-    private readonly ISessionService _session;
-    private readonly IServiceProvider _sp;
+    private readonly HomePageViewModel _vm;
 
-    public HomePage(IAuthService auth, ISessionService session, IServiceProvider sp)
+    public Homepage(HomePageViewModel viewModel)
     {
         InitializeComponent();
-        _auth = auth;
-        _session = session;
-        _sp = sp;
+        _vm = viewModel;
+        BindingContext = _vm;
     }
 
-    private async void OnLogoutClicked(object sender, EventArgs e)
+    protected override async void OnAppearing()
     {
+        base.OnAppearing();
+        // Always reload dashboard when page appears (in case child was changed)
+        await _vm.LoadDashboardAsync();
+    }
+
+    // Event handler for health score card tap
+    private async void OnHealthScoreTapped(object sender, EventArgs e)
+    {
+        if (!_vm.HasChild)
+        {
+            await DisplayAlert("No Child Selected", "Please select a child first", "OK");
+            return;
+        }
+        // TODO: Navigate to health score details
+        await DisplayAlert("Health Score", "View detailed health score history", "OK");
+    }
+
+    // Event handler for measurements card tap
+    private async void OnMeasurementsTapped(object sender, EventArgs e)
+    {
+        if (!_vm.HasChild)
+        {
+            await DisplayAlert("No Child Selected", "Please select a child first", "OK");
+            return;
+        }
+        // TODO: Navigate to measurements history
+        await DisplayAlert("Measurements", "View measurement history", "OK");
+    }
+
+    // Event handlers for actions that aren't implemented yet
+    private async void OnAddHealthScoreTapped(object sender, EventArgs e)
+    {
+        if (!_vm.HasChild)
+        {
+            await DisplayAlert("No Child Selected", "Please select a child first", "OK");
+            return;
+        }
+
         try
         {
-            // set true if you want to revoke all devices; false = just this device
-            var allDevices = false;
-
-            await _auth.LogoutAsync(allDevices);
-
-            // clear any local session data you keep
-            _session.UserId = null;
-            _session.Email = null;
-            _session.SaveToPreferences();
-
-            // navigate back to LoginPage (resolved via DI)
-            var login = _sp.GetRequiredService<LoginPage>();
-            Application.Current.MainPage = login;
+            await Shell.Current.GoToAsync("HealthScore");
         }
-        catch
+        catch (Exception ex)
         {
-            await DisplayAlert("Logout", "Could not logout right now. Please try again.", "OK");
+            await DisplayAlert("Error", $"Failed to navigate: {ex.Message}", "OK");
         }
     }
 
-    private async void OnSelectActiveChildClicked(object sender, EventArgs e)
+    private async void OnAddMeasurementTapped(object sender, EventArgs e)
     {
-        // Jumps to the "Active Child" tab we routed as "active-child"
-        await Shell.Current.GoToAsync("//active-child");
+        if (!_vm.HasChild)
+        {
+            await DisplayAlert("No Child Selected", "Please select a child first", "OK");
+            return;
+        }
+
+        try
+        {
+            await Shell.Current.GoToAsync("Measurement");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"Failed to navigate: {ex.Message}", "OK");
+        }
+    }
+
+    private async void OnViewResourcesTapped(object sender, EventArgs e)
+    {
+        // Navigate to Resources tab
+        await Shell.Current.GoToAsync("//ResourcesPage");
     }
 }

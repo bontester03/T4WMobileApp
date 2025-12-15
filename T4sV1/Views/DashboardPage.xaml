@@ -1,201 +1,37 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage
-    x:Class="T4sV1.Views.DashboardPage"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-    Title="Dashboard">
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="T4sV1.Views.DashboardPage">
 
-    <Grid Padding="16" RowDefinitions="Auto,*" ColumnDefinitions="*">
-        <Label Text="Dashboard" FontSize="24" FontAttributes="Bold" />
-        <Label Grid.Row="1" Text="Welcome! 🎉" />
-    </Grid>
+    <VerticalStackLayout Padding="20">
+
+        <!-- Welcome + Date -->
+        <Label Text="{Binding WelcomeText}" FontSize="20" FontAttributes="Bold" />
+        <Label Text="{Binding TodayString}" FontSize="14" />
+
+        <!-- Child Picker Dropdown (swap later) -->
+        <Picker Title="Select Child"
+                ItemsSource="{Binding Children}"
+                ItemDisplayBinding="{Binding FullName}"
+                SelectedItem="{Binding SelectedChild}" />
+
+        <!-- Latest Measurement Summary -->
+        <Frame BorderColor="LightGray" Padding="10" Margin="10,20,10,10">
+            <VerticalStackLayout>
+                <Label Text="Latest Measurement" FontAttributes="Bold" FontSize="16" />
+                <Label Text="Weight:" />
+                <Label Text="{Binding LastWeightDisplay}" FontAttributes="Bold" />
+                <Label Text="Height:" Margin="0,10,0,0" />
+                <Label Text="{Binding LastHeightDisplay}" FontAttributes="Bold" />
+            </VerticalStackLayout>
+        </Frame>
+
+        <!-- Health Score -->
+        <Frame BorderColor="LightGray" Padding="10" Margin="10">
+            <VerticalStackLayout>
+                <Label Text="Latest Health Score" FontAttributes="Bold" FontSize="16" />
+                <Label Text="{Binding LatestOverallHealthScore}" FontAttributes="Bold" FontSize="22" />
+            </VerticalStackLayout>
+        </Frame>
+
+    </VerticalStackLayout>
 </ContentPage>
-
-
-<!--<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage
-    x:Class="T4sV1.Views.DashboardPage"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-
-    Title="Dashboard"
-            BackgroundColor="#9dc052">
-
-    <ScrollView>
-        <ScrollView.Background>
-            --><!-- StartPoint defaults to (0,0) --><!--
-            <LinearGradientBrush EndPoint="0,1">
-                <GradientStop Color="#e9fdb6" Offset="0.1" />
-                <GradientStop Color="#9dc052" Offset="1.0" />
-            </LinearGradientBrush>
-        </ScrollView.Background>
-        <VerticalStackLayout Padding="20" Spacing="20">
-
-
-
-
-            <Image Source="t4slogo.jpg"
-               WidthRequest="100"
-               HeightRequest="50"
-               Aspect="AspectFit"
-               HorizontalOptions="Center"
-               VerticalOptions="Center" />
-
-
-            --><!-- Welcome Section --><!--
-            <Frame BackgroundColor="White"
-       CornerRadius="16"
-       Padding="20"
-       Margin="0,10"
-       BorderColor="#DDEEDD">
-
-                <VerticalStackLayout Spacing="15">
-                    --><!-- Welcome Section --><!--
-                    <VerticalStackLayout>
-                        <Label Text="👋 Welcome to Your Dashboard"
-                   FontSize="20"
-                   FontAttributes="Bold"
-                   TextColor="#2C3E50" />
-                        <Label Text="Track weight, health scores, and stay updated."
-                   FontSize="14"
-                   TextColor="#6B7280" />
-                    </VerticalStackLayout>
-
-                    --><!-- Children Section Header -->
-                    
-
-                    <!-- Children List --><!--
-                    <CollectionView ItemsSource="{Binding Children}" SelectionMode="None">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                --><!-- Frame provides corner radius and border --><!--
-                                <Frame BackgroundColor="#f6ffe4"
-                   CornerRadius="12"
-                   Padding="0"
-                   Margin="0,6"
-                   BorderColor="#CDE2B9">
-
-                                    <Grid Padding="12"
-                      ColumnDefinitions="Auto, *"
-                      RowDefinitions="Auto, Auto, Auto">
-
-                                        --><!-- Optional Icon --><!--
-                                        <Image Source="childicon.png"
-                           WidthRequest="40"
-                           HeightRequest="40"
-                           Grid.RowSpan="3"
-                           VerticalOptions="Center"
-                           Margin="0,0,10,0" />
-
-                                        --><!-- Name --><!--
-                                        <Label Text="{Binding ChildName, StringFormat='Child Name - {0}'}"
-                           FontAttributes="Bold"
-                           Grid.Column="1"
-                           TextColor="#2E7D32"
-                           FontSize="16" />
-
-                                        --><!-- DOB --><!--
-                                        <Label Text="{Binding DateOfBirth, StringFormat='DOB: {0:dd MMM yyyy}'}"
-                           Grid.Row="1"
-                           Grid.Column="1"
-                           FontSize="13"
-                           TextColor="#4B5563" />
-
-                                        --><!-- Gender --><!--
-                                        <Label Text="{Binding Gender, StringFormat='Gender: {0}'}"
-                           Grid.Row="2"
-                           Grid.Column="1"
-                           FontSize="13"
-                           TextColor="#4B5563" />
-                                    </Grid>
-                                </Frame>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-
-                </VerticalStackLayout>
-            </Frame>
-
-
-
-            --><!-- Summary Stats --><!--
-            <Grid ColumnDefinitions="*,*,*" Padding="10,0" RowSpacing="10">
-
-                --><!-- Children Card --><!--
-                <Frame Grid.Column="0" BackgroundColor="White" CornerRadius="12" Padding="1" Margin="5" HeightRequest="120">
-                    <VerticalStackLayout HorizontalOptions="Center" Spacing="8">
-                        <Image Source="child_icon.png" WidthRequest="10" HeightRequest="10" />
-                        <Label Text="👶" FontSize="24" HorizontalOptions="Center" />
-                        <Label Text="{Binding TotalChildren}" FontSize="16" HorizontalOptions="Center" />
-                        <Label Text="Children" FontSize="12" TextColor="Gray" HorizontalOptions="Center" />
-                    </VerticalStackLayout>
-                </Frame>
-
-                --><!-- Health Scores Card --><!--
-                <Frame Grid.Column="1" BackgroundColor="White" CornerRadius="12" Padding="1" Margin="5"  HeightRequest="120">
-                    <VerticalStackLayout HorizontalOptions="Center" Spacing="8">
-                        <Image Source="health_icon.png" WidthRequest="10" HeightRequest="10" />
-                        <Label Text="🩺" FontSize="24" HorizontalOptions="Center" />
-                        <Label Text="{Binding TotalHealthScores}" FontSize="16" HorizontalOptions="Center" />
-                        <Label Text="Health Logs" FontSize="12" TextColor="Gray" HorizontalOptions="Center" />
-                    </VerticalStackLayout>
-                    <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnHealthScoresTapped" />
-                    </Frame.GestureRecognizers>
-                </Frame>
-
-                --><!-- Weight Logs Card --><!--
-                <Frame Grid.Column="2" BackgroundColor="White" CornerRadius="12" Padding="1" Margin="5"  HeightRequest="120">
-                    <VerticalStackLayout HorizontalOptions="Center" Spacing="8">
-                        <Image Source="weight_icon.png" WidthRequest="10" HeightRequest="10" />
-                        <Label Text="⚖️" FontSize="24" HorizontalOptions="Center" />
-                        <Label Text="{Binding TotalWeightLogs}" FontSize="16" HorizontalOptions="Center" />
-                        <Label Text="Weight Logs" FontSize="12" TextColor="Gray" HorizontalOptions="Center" />
-                    </VerticalStackLayout>
-                    <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnMeasurementsTapped" />
-                    </Frame.GestureRecognizers>
-                </Frame>
-
-            </Grid>
-
-
-
-
-            --><!-- Video of the Day --><!--
-            <Frame BackgroundColor="White"
-       CornerRadius="10"
-       Padding="10">
-                <VerticalStackLayout Spacing="5">
-                    <Label Text="🎥 Video of the Day"
-               FontSize="Medium"
-               FontAttributes="Bold"
-               TextColor="#34495E" />
-
-                    --><!-- Make sure x:Name is defined --><!--
-                    <WebView x:Name="VideoOfTheDay"
-                 HeightRequest="200"
-                 IsVisible="False"
-                 HorizontalOptions="FillAndExpand"
-                 VerticalOptions="FillAndExpand"
-                 BackgroundColor="Transparent" />
-                </VerticalStackLayout>
-            </Frame>
-
-
-
-         
-            --><!-- Logout --><!--
-            <Button Text="Logout"
-        BackgroundColor="Crimson"
-        TextColor="White"
-        CornerRadius="10"
-        Padding="10"
-        FontAttributes="Bold"
-        Clicked="OnLogoutClicked" />
-
-
-        </VerticalStackLayout>
-    </ScrollView>
-</ContentPage>-->

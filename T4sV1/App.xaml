@@ -5,7 +5,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:T4sV1"
     xmlns:views="clr-namespace:T4sV1.Views"
-    xmlns:conv="clr-namespace:T4sV1.Converters">
+    xmlns:conv="clr-namespace:T4sV1.Converters"
+     xmlns:converters="clr-namespace:T4sV1.Converters">
     <!-- 👈 add this -->
 
     <Application.Resources>
@@ -18,7 +19,11 @@
             </ResourceDictionary.MergedDictionaries>
 
             <!-- 👇 Converter must be outside MergedDictionaries -->
-            <conv:ReferenceEqualityConverter x:Key="ReferenceEqualityConverter" />
+            <!--<conv:ReferenceEqualityConverter x:Key="ReferenceEqualityConverter" />-->
+            <converters:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            <converters:IsGreaterThanZeroConverter x:Key="IsGreaterThanZeroConverter" />
+            <converters:ReferenceEqualityConverter x:Key="ReferenceEqualityConverter" />
+            <converters:ReferenceEqualityMultiConverter x:Key="ReferenceEqualityMultiConverter" />
 
             <Style x:Key="InvalidEntryStyle" TargetType="Entry">
                 <Setter Property="TextColor" Value="Red" />

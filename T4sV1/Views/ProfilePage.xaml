@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="T4sV1.Views.ProfilePage"
+             xmlns:vm="clr-namespace:T4sV1.Model.ViewModels"
+             x:DataType="vm:ProfileViewModel"
+             Title="Profile"
+             Shell.NavBarIsVisible="False">
+
+    <!-- Page Background Gradient -->
+    <ContentPage.Background>
+        <LinearGradientBrush EndPoint="0,1">
+            <GradientStop Color="#e9fdb6" Offset="0.1" />
+            <GradientStop Color="#9dc052" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <RefreshView IsRefreshing="{Binding IsBusy}"
+                 Command="{Binding RefreshCommand}"
+                 BackgroundColor="Transparent">
+
+        <ScrollView BackgroundColor="Transparent">
+
+            <VerticalStackLayout Spacing="0">
+
+                <!-- Mountain/Nature Header with Avatar -->
+                <Grid HeightRequest="120" BackgroundColor="#b8db88">
+
+                    <!-- Back Button -->
+                    <Button Text="←"
+                            BackgroundColor="Transparent"
+                            TextColor="#2d5016"
+                            FontSize="24"
+                            FontAttributes="Bold"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            CornerRadius="20"
+                            Margin="15"
+                            HorizontalOptions="Start"
+                            VerticalOptions="Start"
+                            Command="{Binding BackCommand}"/>
+
+                    <!-- Decorative Elements (Trees/Mountain) -->
+                    <Label Text="🌲"
+                           FontSize="40"
+                           HorizontalOptions="Start"
+                           VerticalOptions="End"
+                           Margin="30,0,0,10"/>
+                    <Label Text="⛰️"
+                           FontSize="60"
+                           HorizontalOptions="Center"
+                           VerticalOptions="End"
+                           Margin="0,0,0,15"/>
+                    <Label Text="🌲"
+                           FontSize="35"
+                           HorizontalOptions="End"
+                           VerticalOptions="End"
+                           Margin="0,0,40,12"/>
+
+                    <!-- Avatar (overlapping) -->
+                    <Frame WidthRequest="100"
+                           HeightRequest="100"
+                           CornerRadius="50"
+                           Padding="3"
+                           BorderColor="White"
+                           BackgroundColor="White"
+                           HasShadow="True"
+                           IsClippedToBounds="True"
+                           HorizontalOptions="Center"
+                           VerticalOptions="End"
+                           Margin="0,0,0,-50">
+                        <Frame.Shadow>
+                            <Shadow Brush="Black" Opacity="0.3" Radius="10" Offset="0,5"/>
+                        </Frame.Shadow>
+                        <Image Source="{Binding Child.AvatarUrl, TargetNullValue='dotnet_bot.png'}"
+                               Aspect="AspectFill"/>
+                    </Frame>
+                </Grid>
+
+                <!-- Content Card -->
+                <Frame Padding="20"
+                       CornerRadius="20"
+                       BackgroundColor="White"
+                       HasShadow="True"
+                       Margin="15,60,15,15">
+
+                    <VerticalStackLayout Spacing="20">
+
+                        <!-- Loading Indicator -->
+                        <ActivityIndicator IsRunning="{Binding IsBusy}"
+                                         IsVisible="{Binding IsBusy}"
+                                         Color="#2d5016"
+                                         HeightRequest="50"/>
+
+                        <!-- Content (visible when not busy) -->
+                        <VerticalStackLayout Spacing="20" 
+                                            IsVisible="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}">
+
+                            <!-- Child Name (Editable) -->
+                            <VerticalStackLayout Spacing="8">
+                                <Entry Text="{Binding Child.ChildName}"
+                                       Placeholder="Child Name"
+                                       HorizontalTextAlignment="Center"
+                                       FontSize="24"
+                                       FontAttributes="Bold"
+                                       TextColor="#2d5016"
+                                       BackgroundColor="Transparent"/>
+                            </VerticalStackLayout>
+
+                            <!-- Child Details Section -->
+                            <VerticalStackLayout Spacing="10">
+
+                                <Label Text="Child Details"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="#2d5016"
+                                       Margin="0,10,0,5"/>
+
+                                <!-- Gender -->
+                                <Frame Padding="15,12"
+                                       CornerRadius="12"
+                                       BackgroundColor="#FFF9E6"
+                                       HasShadow="False"
+                                       BorderColor="Transparent">
+                                    <Grid ColumnDefinitions="Auto,*">
+                                        <Label Grid.Column="0"
+                                               Text="⚧️"
+                                               FontSize="20"
+                                               VerticalOptions="Center"
+                                               Margin="0,0,12,0"/>
+                                        <Picker Grid.Column="1"
+                                                ItemsSource="{Binding GenderOptions}"
+                                                SelectedItem="{Binding SelectedGender}"
+                                                Title="Select Gender"
+                                                FontSize="14"
+                                                TextColor="#2d5016"
+                                                BackgroundColor="Transparent"
+                                                VerticalOptions="Center"/>
+                                    </Grid>
+                                </Frame>
+
+                                <!-- Date of Birth -->
+                                <Frame Padding="15,12"
+                                       CornerRadius="12"
+                                       BackgroundColor="#FFF9E6"
+                                       HasShadow="False"
+                                       BorderColor="Transparent">
+                                    <Grid ColumnDefinitions="Auto,*">
+                                        <Label Grid.Column="0"
+                                               Text="📅"
+                                               FontSize="20"
+                                               VerticalOptions="Center"
+                                               Margin="0,0,12,0"/>
+                                        <DatePicker Grid.Column="1"
+                                                    Date="{Binding Child.DateOfBirth}"
+                                                    Format="dd/MM/yyyy"
+                                                    FontSize="14"
+                                                    TextColor="#2d5016"
+                                                    BackgroundColor="Transparent"
+                                                    VerticalOptions="Center"/>
+                                    </Grid>
+                                </Frame>
+
+                                <!-- Update Avatar -->
+                                <Frame Padding="15,12"
+                                       CornerRadius="12"
+                                       BackgroundColor="#FFF9E6"
+                                       HasShadow="False"
+                                       BorderColor="Transparent">
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding UpdateAvatarCommand}"/>
+                                    </Frame.GestureRecognizers>
+                                    <Grid ColumnDefinitions="Auto,*,Auto">
+                                        <Label Grid.Column="0"
+                                               Text="📸"
+                                               FontSize="20"
+                                               VerticalOptions="Center"
+                                               Margin="0,0,12,0"/>
+                                        <Label Grid.Column="1"
+                                               Text="Update Avatar"
+                                               FontSize="14"
+                                               TextColor="#2d5016"
+                                               VerticalOptions="Center"/>
+                                        <Label Grid.Column="2"
+                                               Text="›"
+                                               FontSize="20"
+                                               TextColor="#999"
+                                               VerticalOptions="Center"/>
+                                    </Grid>
+                                </Frame>
+
+                            </VerticalStackLayout>
+
+                            <!-- Parent Information Section -->
+                            <VerticalStackLayout Spacing="10">
+
+                                <Label Text="Parent Information"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="#2d5016"
+                                       Margin="0,15,0,5"/>
+
+                                <!-- School -->
+                                <Frame Padding="15,12"
+                                       CornerRadius="12"
+                                       BackgroundColor="#FFF9E6"
+                                       HasShadow="False"
+                                       BorderColor="Transparent">
+                                    <Grid ColumnDefinitions="Auto,*">
+                                        <Label Grid.Column="0"
+                                               Text="🏫"
+                                               FontSize="20"
+                                               VerticalOptions="Center"
+                                               Margin="0,0,12,0"/>
+                                        <Entry Grid.Column="1"
+                                               Text="{Binding ParentInfo.School}"
+                                               Placeholder="Enter school name"
+                                               FontSize="14"
+                                               TextColor="#2d5016"
+                                               BackgroundColor="Transparent"
+                                               VerticalOptions="Center"
+                                               PlaceholderColor="#999"/>
+                                    </Grid>
+                                </Frame>
+
+                                <!-- Class -->
+                                <Frame Padding="15,12"
+                                       CornerRadius="12"
+                                       BackgroundColor="#FFF9E6"
+                                       HasShadow="False"
+                                       BorderColor="Transparent">
+                                    <Grid ColumnDefinitions="Auto,*">
+                                        <Label Grid.Column="0"
+                                               Text="📚"
+                                               FontSize="20"
+                                               VerticalOptions="Center"
+                                               Margin="0,0,12,0"/>
+                                        <Entry Grid.Column="1"
+                                               Text="{Binding ParentInfo.Class}"
+                                               Placeholder="e.g., Y10"
+                                               FontSize="14"
+                                               TextColor="#2d5016"
+                                               BackgroundColor="Transparent"
+                                               VerticalOptions="Center"
+                                               PlaceholderColor="#999"/>
+                                    </Grid>
+                                </Frame>
+
+                                <!-- Parent Name -->
+                                <Frame Padding="15,12"
+                                       CornerRadius="12"
+                                       BackgroundColor="#FFF9E6"
+                                       HasShadow="False"
+                                       BorderColor="Transparent">
+                                    <Grid ColumnDefinitions="Auto,*">
+                                        <Label Grid.Column="0"
+                                               Text="👤"
+                                               FontSize="20"
+                                               VerticalOptions="Center"
+                                               Margin="0,0,12,0"/>
+                                        <Entry Grid.Column="1"
+                                               Text="{Binding ParentInfo.ParentGuardianName}"
+                                               Placeholder="Enter full name"
+                                               FontSize="14"
+                                               TextColor="#2d5016"
+                                               BackgroundColor="Transparent"
+                                               VerticalOptions="Center"
+                                               PlaceholderColor="#999"/>
+                                    </Grid>
+                                </Frame>
+
+                                <!-- Relationship -->
+                                <Frame Padding="15,12"
+                                       CornerRadius="12"
+                                       BackgroundColor="#FFF9E6"
+                                       HasShadow="False"
+                                       BorderColor="Transparent">
+                                    <Grid ColumnDefinitions="Auto,*">
+                                        <Label Grid.Column="0"
+                                               Text="👨‍👩‍👧‍👦"
+                                               FontSize="20"
+                                               VerticalOptions="Center"
+                                               Margin="0,0,12,0"/>
+                                        <Entry Grid.Column="1"
+                                               Text="{Binding ParentInfo.RelationshipToChild}"
+                                               Placeholder="e.g., Parent, Guardian"
+                                               FontSize="14"
+                                               TextColor="#2d5016"
+                                               BackgroundColor="Transparent"
+                                               VerticalOptions="Center"
+                                               PlaceholderColor="#999"/>
+                                    </Grid>
+                                </Frame>
+
+                                <!-- Phone -->
+                                <Frame Padding="15,12"
+                                       CornerRadius="12"
+                                       BackgroundColor="#FFF9E6"
+                                       HasShadow="False"
+                                       BorderColor="Transparent">
+                                    <Grid ColumnDefinitions="Auto,*">
+                                        <Label Grid.Column="0"
+                                               Text="📱"
+                                               FontSize="20"
+                                               VerticalOptions="Center"
+                                               Margin="0,0,12,0"/>
+                                        <Entry Grid.Column="1"
+                                               Text="{Binding ParentInfo.TeleNumber}"
+                                               Placeholder="Enter phone number"
+                                               Keyboard="Telephone"
+                                               FontSize="14"
+                                               TextColor="#2d5016"
+                                               BackgroundColor="Transparent"
+                                               VerticalOptions="Center"
+                                               PlaceholderColor="#999"/>
+                                    </Grid>
+                                </Frame>
+
+                                <!-- Email -->
+                                <Frame Padding="15,12"
+                                       CornerRadius="12"
+                                       BackgroundColor="#FFF9E6"
+                                       HasShadow="False"
+                                       BorderColor="Transparent">
+                                    <Grid ColumnDefinitions="Auto,*">
+                                        <Label Grid.Column="0"
+                                               Text="📧"
+                                               FontSize="20"
+                                               VerticalOptions="Center"
+                                               Margin="0,0,12,0"/>
+                                        <Entry Grid.Column="1"
+                                               Text="{Binding ParentInfo.Email}"
+                                               Placeholder="Enter email"
+                                               Keyboard="Email"
+                                               FontSize="14"
+                                               TextColor="#2d5016"
+                                               BackgroundColor="Transparent"
+                                               VerticalOptions="Center"
+                                               PlaceholderColor="#999"/>
+                                    </Grid>
+                                </Frame>
+
+                                <!-- Postcode -->
+                                <Frame Padding="15,12"
+                                       CornerRadius="12"
+                                       BackgroundColor="#FFF9E6"
+                                       HasShadow="False"
+                                       BorderColor="Transparent">
+                                    <Grid ColumnDefinitions="Auto,*">
+                                        <Label Grid.Column="0"
+                                               Text="📍"
+                                               FontSize="20"
+                                               VerticalOptions="Center"
+                                               Margin="0,0,12,0"/>
+                                        <Entry Grid.Column="1"
+                                               Text="{Binding ParentInfo.Postcode}"
+                                               Placeholder="Enter postcode"
+                                               FontSize="14"
+                                               TextColor="#2d5016"
+                                               BackgroundColor="Transparent"
+                                               VerticalOptions="Center"
+                                               PlaceholderColor="#999"/>
+                                    </Grid>
+                                </Frame>
+
+                            </VerticalStackLayout>
+
+                            <!-- Save Button -->
+                            <Button Text="💾 Save Changes"
+                                    BackgroundColor="#9dc052"
+                                    TextColor="White"
+                                    FontSize="16"
+                                    FontAttributes="Bold"
+                                    CornerRadius="15"
+                                    Padding="0,15"
+                                    Margin="0,15,0,0"
+                                    Command="{Binding SaveCommand}"/>
+
+                        </VerticalStackLayout>
+
+                    </VerticalStackLayout>
+
+                </Frame>
+
+            </VerticalStackLayout>
+
+        </ScrollView>
+
+    </RefreshView>
+
+</ContentPage>

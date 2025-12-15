@@ -4,18 +4,23 @@ namespace T4sV1.Views;
 
 public partial class SelectActiveChildPage : ContentPage
 {
-    private readonly SelectActiveChildViewModel _vm;
-
-    public SelectActiveChildPage(SelectActiveChildViewModel vm)
+    public SelectActiveChildPage(SelectActiveChildViewModel viewModel)
     {
         InitializeComponent();
-        _vm = vm;
-        BindingContext = _vm;
+        BindingContext = viewModel;
     }
 
-    protected override async void OnAppearing()
+    protected override void OnAppearing()
     {
         base.OnAppearing();
-        await _vm.LoadAsync();
+        if (BindingContext is SelectActiveChildViewModel vm)
+        {
+            _ = vm.LoadAsync();
+        }
+    }
+
+    private async void OnAddChildClicked(object sender, EventArgs e)
+    {
+        await DisplayAlert("Info", "Add child functionality coming soon", "OK");
     }
 }

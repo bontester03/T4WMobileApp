@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="T4sV1.Views.ParentDashboardPage"
+             xmlns:vm="clr-namespace:T4sV1.Model.ViewModels"
+             xmlns:model="clr-namespace:T4sV1.Model.Dashboard"
+             x:DataType="vm:ParentDashboardViewModel"
+             Title="Your Children"
+             BackgroundColor="#F5F5F5">
+
+    <Grid RowDefinitions="Auto,*" Padding="15">
+
+        <!-- Header -->
+        <Frame Grid.Row="0" 
+               Padding="15"
+               Margin="0,0,0,15"
+               CornerRadius="12"
+               BackgroundColor="#10B981"
+               HasShadow="True">
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                <Label Grid.Column="0"
+                       Text="👥"
+                       FontSize="28"
+                       VerticalOptions="Center"/>
+                <VerticalStackLayout Grid.Column="1" 
+                                    Spacing="2"
+                                    VerticalOptions="Center">
+                    <Label Text="Your Children"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="White"/>
+                    <Label Text="Manage all your children"
+                           FontSize="12"
+                           TextColor="White"
+                           Opacity="0.8"/>
+                </VerticalStackLayout>
+            </Grid>
+        </Frame>
+
+        <!-- Children List -->
+        <RefreshView Grid.Row="1"
+                     IsRefreshing="{Binding IsBusy}"
+                     Command="{Binding RefreshCommand}">
+            <ScrollView>
+                <CollectionView ItemsSource="{Binding Children}"
+                               SelectionMode="None">
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:ChildSummaryDto">
+                            <Frame Padding="0"
+                                   Margin="0,0,0,15"
+                                   CornerRadius="16"
+                                   HasShadow="True"
+                                   BackgroundColor="White"
+                                   BorderColor="#E5E7EB">
+
+                                <VerticalStackLayout Spacing="0">
+
+                                    <!-- Child Details Section (Top) -->
+                                    <Frame Padding="15"
+                                           Margin="0"
+                                           CornerRadius="16"
+                                           BackgroundColor="#EFF6FF"
+                                           BorderColor="Transparent"
+                                           HasShadow="False">
+                                        <Grid ColumnDefinitions="70,*" ColumnSpacing="12">
+                                            <!-- Avatar -->
+                                            <Frame Grid.Column="0"
+                                                   WidthRequest="60"
+                                                   HeightRequest="60"
+                                                   CornerRadius="30"
+                                                   Padding="0"
+                                                   HasShadow="True"
+                                                   BorderColor="#3B82F6"
+                                                   IsClippedToBounds="True"
+                                                   VerticalOptions="Center">
+                                                <Image Source="{Binding AvatarUrl, TargetNullValue='dotnet_bot.png'}"
+                                                       Aspect="AspectFill"/>
+                                            </Frame>
+
+                                            <!-- Child Info -->
+                                            <VerticalStackLayout Grid.Column="1" 
+                                                               Spacing="4"
+                                                               VerticalOptions="Center">
+                                                <Label Text="{Binding FullName}"
+                                                       FontSize="20"
+                                                       FontAttributes="Bold"
+                                                       TextColor="#1E40AF"/>
+
+                                                <HorizontalStackLayout Spacing="12">
+                                                    <Label TextColor="#6B7280" FontSize="13">
+                                                        <Label.FormattedText>
+                                                            <FormattedString>
+                                                                <Span Text="🎂 " />
+                                                                <Span Text="{Binding AgeYears}" FontAttributes="Bold"/>
+                                                                <Span Text=" years" />
+                                                            </FormattedString>
+                                                        </Label.FormattedText>
+                                                    </Label>
+
+                                                    <BoxView WidthRequest="1" 
+                                                            HeightRequest="15" 
+                                                            BackgroundColor="#D1D5DB"
+                                                            VerticalOptions="Center"/>
+
+                                                    <Label TextColor="#F59E0B" FontSize="13">
+                                                        <Label.FormattedText>
+                                                            <FormattedString>
+                                                                <Span Text="🪙 " />
+                                                                <Span Text="{Binding TotalPoints}" FontAttributes="Bold"/>
+                                                            </FormattedString>
+                                                        </Label.FormattedText>
+                                                    </Label>
+                                                </HorizontalStackLayout>
+
+                                                <Label TextColor="#10B981" 
+                                                       FontSize="12"
+                                                       FontAttributes="Bold">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span Text="⭐ Level " />
+                                                            <Span Text="{Binding Level}"/>
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </Frame>
+
+                                    <!-- Separator Line -->
+                                    <BoxView HeightRequest="1" 
+                                            BackgroundColor="#E5E7EB" 
+                                            Margin="15,0"/>
+
+                                    <!-- Parent Actions Section (Bottom) -->
+                                    <VerticalStackLayout Padding="15" Spacing="12">
+
+                                        <!-- Rewards Group -->
+                                        <Frame Padding="12"
+                                               CornerRadius="10"
+                                               BackgroundColor="#ECFDF5"
+                                               BorderColor="Transparent"
+                                               HasShadow="False">
+                                            <VerticalStackLayout Spacing="8">
+                                                <Label Text="🎁 Rewards Management"
+                                                       FontSize="15"
+                                                       FontAttributes="Bold"
+                                                       TextColor="#059669"/>
+
+                                                <Grid ColumnDefinitions="*,*" 
+                                                      RowDefinitions="Auto,Auto"
+                                                      ColumnSpacing="8"
+                                                      RowSpacing="8">
+
+                                                    <Button Grid.Row="0" Grid.Column="0"
+                                                            Text="📝 Create"
+                                                            BackgroundColor="#10B981"
+                                                            TextColor="White"
+                                                            FontSize="12"
+                                                            CornerRadius="8"
+                                                            HeightRequest="38"
+                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ParentDashboardViewModel}}, Path=CreateRewardCommand}"
+                                                            CommandParameter="{Binding .}"/>
+
+                                                    <Button Grid.Row="0" Grid.Column="1"
+                                                            Text="📋 View All"
+                                                            BackgroundColor="#10B981"
+                                                            TextColor="White"
+                                                            FontSize="12"
+                                                            CornerRadius="8"
+                                                            HeightRequest="38"
+                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ParentDashboardViewModel}}, Path=ViewRewardsCommand}"
+                                                            CommandParameter="{Binding .}"/>
+
+                                                    <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                                            Text="✅ Approve Requests"
+                                                            BackgroundColor="#059669"
+                                                            TextColor="White"
+                                                            FontSize="12"
+                                                            CornerRadius="8"
+                                                            HeightRequest="38"
+                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ParentDashboardViewModel}}, Path=ApproveRequestsCommand}"
+                                                            CommandParameter="{Binding .}"/>
+                                                </Grid>
+                                            </VerticalStackLayout>
+                                        </Frame>
+
+                                        <!-- Tasks Group -->
+                                        <Frame Padding="12"
+                                               CornerRadius="10"
+                                               BackgroundColor="#FEF3C7"
+                                               BorderColor="Transparent"
+                                               HasShadow="False">
+                                            <VerticalStackLayout Spacing="8">
+                                                <Label Text="📝 Tasks Management"
+                                                       FontSize="15"
+                                                       FontAttributes="Bold"
+                                                       TextColor="#D97706"/>
+
+                                                <Grid ColumnDefinitions="*,*" 
+                                                      RowDefinitions="Auto,Auto"
+                                                      ColumnSpacing="8"
+                                                      RowSpacing="8">
+
+                                                    <Button Grid.Row="0" Grid.Column="0"
+                                                            Text="➕ Add"
+                                                            BackgroundColor="#F59E0B"
+                                                            TextColor="White"
+                                                            FontSize="12"
+                                                            CornerRadius="8"
+                                                            HeightRequest="38"
+                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ParentDashboardViewModel}}, Path=AddTaskCommand}"
+                                                            CommandParameter="{Binding .}"/>
+
+                                                    <Button Grid.Row="0" Grid.Column="1"
+                                                            Text="📋 View All"
+                                                            BackgroundColor="#F59E0B"
+                                                            TextColor="White"
+                                                            FontSize="12"
+                                                            CornerRadius="8"
+                                                            HeightRequest="38"
+                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ParentDashboardViewModel}}, Path=ViewTasksCommand}"
+                                                            CommandParameter="{Binding .}"/>
+
+                                                    <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                                            Text="📌 Assign Task"
+                                                            BackgroundColor="#D97706"
+                                                            TextColor="White"
+                                                            FontSize="12"
+                                                            CornerRadius="8"
+                                                            HeightRequest="38"
+                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ParentDashboardViewModel}}, Path=AssignTaskCommand}"
+                                                            CommandParameter="{Binding .}"/>
+                                                </Grid>
+                                            </VerticalStackLayout>
+                                        </Frame>
+
+                                        <!-- Quick Actions -->
+                                        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                                            <Button Grid.Column="0"
+                                                    Text="👤 View Profile"
+                                                    BackgroundColor="#3B82F6"
+                                                    TextColor="White"
+                                                    FontSize="12"
+                                                    CornerRadius="8"
+                                                    HeightRequest="40"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ParentDashboardViewModel}}, Path=ViewProfileCommand}"
+                                                    CommandParameter="{Binding .}"/>
+
+                                            <Button Grid.Column="1"
+                                                    Text="🗑️ Delete"
+                                                    BackgroundColor="#EF4444"
+                                                    TextColor="White"
+                                                    FontSize="12"
+                                                    CornerRadius="8"
+                                                    HeightRequest="40"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ParentDashboardViewModel}}, Path=DeleteChildCommand}"
+                                                    CommandParameter="{Binding .}"/>
+                                        </Grid>
+
+                                    </VerticalStackLayout>
+
+                                </VerticalStackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                    <!-- Empty View -->
+                    <CollectionView.EmptyView>
+                        <VerticalStackLayout Spacing="20" 
+                                           Padding="40"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Center">
+                            <Label Text="👶" 
+                                   FontSize="80"
+                                   HorizontalOptions="Center"/>
+                            <Label Text="No children yet" 
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   HorizontalOptions="Center"
+                                   TextColor="#374151"/>
+                            <Label Text="Add your first child to get started with tracking their wellbeing journey" 
+                                   FontSize="14"
+                                   TextColor="#6B7280"
+                                   HorizontalOptions="Center"
+                                   HorizontalTextAlignment="Center"
+                                   MaximumWidthRequest="300"/>
+                            <Button Text="+ Add Your First Child"
+                                    BackgroundColor="#10B981"
+                                    TextColor="White"
+                                    CornerRadius="12"
+                                    Padding="30,12"
+                                    FontSize="16"
+                                    FontAttributes="Bold"
+                                    HorizontalOptions="Center"
+                                    Margin="0,10,0,0"
+                                    Command="{Binding AddChildCommand}"/>
+                        </VerticalStackLayout>
+                    </CollectionView.EmptyView>
+
+                </CollectionView>
+            </ScrollView>
+        </RefreshView>
+
+    </Grid>
+
+</ContentPage>

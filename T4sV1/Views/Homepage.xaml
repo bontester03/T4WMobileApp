@@ -1,21 +1,666 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage
-    x:Class="T4sV1.Views.HomePage"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="Home">
+<!--<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="T4sV1.Views.Homepage"
+             xmlns:vm="clr-namespace:T4sV1.Model.ViewModels"
+             x:DataType="vm:HomePageViewModel"
+             Title="Dashboard"
+             Shell.NavBarIsVisible="False">
 
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Logout" Clicked="OnLogoutClicked" />
-        <ToolbarItem Text="Active Child" Clicked="OnSelectActiveChildClicked" />
-    </ContentPage.ToolbarItems>
+    <Grid RowDefinitions="*">
+        <RefreshView IsRefreshing="{Binding IsLoading}"
+                     Command="{Binding RefreshCommand}">
+            <ScrollView>
+                --><!-- Gradient Background --><!--
+                <ScrollView.Background>
+                    <LinearGradientBrush EndPoint="0,1">
+                        <GradientStop Color="#e9fdb6" Offset="0.1" />
+                        <GradientStop Color="#9dc052" Offset="1.0" />
+                    </LinearGradientBrush>
+                </ScrollView.Background>
 
-    <Grid Padding="16">
-        <!-- your existing home content -->
+                <VerticalStackLayout Padding="20" Spacing="20">
 
-        <Button
-            Margin="0,16,0,0"
-            Text="Select Active Child"
-            Clicked="OnSelectActiveChildClicked" />
+                    --><!-- Header with Logout --><!--
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0"
+                               Text="Dashboard"
+                               FontSize="28"
+                               FontAttributes="Bold"
+                               VerticalOptions="Center"
+                               TextColor="#2d5016"/>
+                        <Button Grid.Column="1"
+                                Text="Logout"
+                                Command="{Binding LogoutCommand}"
+                                BackgroundColor="#F44336"
+                                TextColor="White"
+                                CornerRadius="8"
+                                Padding="15,8"/>
+                    </Grid>
+
+                    --><!-- Loading Indicator --><!--
+                    <ActivityIndicator IsRunning="{Binding IsLoading}"
+                                     IsVisible="{Binding IsLoading}"
+                                     Color="#2d5016"
+                                     HeightRequest="50"/>
+
+                    --><!-- Error Message --><!--
+                    <Frame IsVisible="{Binding HasError}"
+                           BackgroundColor="#FFEBEE"
+                           BorderColor="#EF5350"
+                           Padding="15"
+                           CornerRadius="8"
+                           HasShadow="False">
+                        <Label Text="{Binding ErrorMessage}"
+                               TextColor="#C62828"/>
+                    </Frame>
+
+                    --><!-- Active Child Card --><!--
+                    <Frame Padding="20"
+                           CornerRadius="12"
+                           HasShadow="True"
+                           BackgroundColor="White">
+                        <Grid ColumnDefinitions="80,*,Auto" ColumnSpacing="15">
+
+                            --><!-- Avatar --><!--
+                            <Frame Grid.Column="0"
+                                   WidthRequest="70"
+                                   HeightRequest="70"
+                                   CornerRadius="35"
+                                   Padding="0"
+                                   HasShadow="False"
+                                   BorderColor="{StaticResource Primary}"
+                                   IsClippedToBounds="True">
+                                <Image Source="{Binding ChildAvatar}"
+                                       Aspect="AspectFill"/>
+                            </Frame>
+
+                            --><!-- Info --><!--
+                            <VerticalStackLayout Grid.Column="1" 
+                                               VerticalOptions="Center"
+                                               Spacing="5">
+                                <Label Text="{Binding ChildName}"
+                                       FontSize="20"
+                                       FontAttributes="Bold"/>
+                                <Label Text="{Binding ChildDetails}"
+                                       FontSize="14"
+                                       TextColor="Gray"/>
+                            </VerticalStackLayout>
+
+                            --><!-- Change Button --><!--
+                            <Button Grid.Column="2"
+                                    Text="Change"
+                                    Command="{Binding ChangeChildCommand}"
+                                    BackgroundColor="{StaticResource Primary}"
+                                    TextColor="White"
+                                    CornerRadius="8"
+                                    Padding="15,8"
+                                    VerticalOptions="Center"/>
+                        </Grid>
+                    </Frame>
+
+                    --><!-- Content (Only show when child selected) --><!--
+                    <VerticalStackLayout IsVisible="{Binding HasChild}" Spacing="20">
+
+                        --><!-- Quick Stats --><!--
+                        <Label Text="Quick Stats"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               Margin="0,10,0,5"
+                               TextColor="#2d5016"/>
+
+                        <Grid ColumnDefinitions="*,*" 
+                              RowDefinitions="*,*"
+                              ColumnSpacing="15"
+                              RowSpacing="15">
+
+                            --><!-- Health Score Card --><!--
+                            <Frame Grid.Row="0" Grid.Column="0"
+                                   Padding="15"
+                                   CornerRadius="12"
+                                   HasShadow="True"
+                                   BackgroundColor="#E8F5E9">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnHealthScoreTapped"/>
+                                </Frame.GestureRecognizers>
+                                <VerticalStackLayout Spacing="10">
+                                    <Label Text="🏃"
+                                           FontSize="32"
+                                           HorizontalOptions="Center"/>
+                                    <Label Text="{Binding HealthScore}"
+                                           FontSize="24"
+                                           FontAttributes="Bold"
+                                           HorizontalOptions="Center"/>
+                                    <Label Text="{Binding HealthScoreLabel}"
+                                           FontSize="12"
+                                           TextColor="Gray"
+                                           HorizontalOptions="Center"
+                                           HorizontalTextAlignment="Center"/>
+                                </VerticalStackLayout>
+                            </Frame>
+
+                            --><!-- Weight Card --><!--
+                            <Frame Grid.Row="0" Grid.Column="1"
+                                   Padding="15"
+                                   CornerRadius="12"
+                                   HasShadow="True"
+                                   BackgroundColor="#E3F2FD">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnMeasurementsTapped"/>
+                                </Frame.GestureRecognizers>
+                                <VerticalStackLayout Spacing="10">
+                                    <Label Text="⚖️"
+                                           FontSize="32"
+                                           HorizontalOptions="Center"/>
+                                    <Label Text="{Binding Weight}"
+                                           FontSize="24"
+                                           FontAttributes="Bold"
+                                           HorizontalOptions="Center"/>
+                                    <Label Text="{Binding WeightLabel}"
+                                           FontSize="12"
+                                           TextColor="Gray"
+                                           HorizontalOptions="Center"
+                                           HorizontalTextAlignment="Center"/>
+                                </VerticalStackLayout>
+                            </Frame>
+
+                            --><!-- Level Card --><!--
+                            <Frame Grid.Row="1" Grid.Column="0"
+                                   Padding="15"
+                                   CornerRadius="12"
+                                   HasShadow="True"
+                                   BackgroundColor="#FFF3E0">
+                                <VerticalStackLayout Spacing="10">
+                                    <Label Text="⭐"
+                                           FontSize="32"
+                                           HorizontalOptions="Center"/>
+                                    <Label Text="{Binding Level}"
+                                           FontSize="24"
+                                           FontAttributes="Bold"
+                                           HorizontalOptions="Center"/>
+                                    <Label Text="Level"
+                                           FontSize="12"
+                                           TextColor="Gray"
+                                           HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+                            </Frame>
+
+                            --><!-- Points Card --><!--
+                            <Frame Grid.Row="1" Grid.Column="1"
+                                   Padding="15"
+                                   CornerRadius="12"
+                                   HasShadow="True"
+                                   BackgroundColor="#F3E5F5">
+                                <VerticalStackLayout Spacing="10">
+                                    <Label Text="🎯"
+                                           FontSize="32"
+                                           HorizontalOptions="Center"/>
+                                    <Label Text="{Binding Points}"
+                                           FontSize="24"
+                                           FontAttributes="Bold"
+                                           HorizontalOptions="Center"/>
+                                    <Label Text="Total Points"
+                                           FontSize="12"
+                                           TextColor="Gray"
+                                           HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+                            </Frame>
+
+                        </Grid>
+
+                        --><!-- Action Buttons --><!--
+                        <Label Text="Quick Actions"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               Margin="0,10,0,5"
+                               TextColor="#2d5016"/>
+
+                        <Button Text="📊 View Profile"
+                                Command="{Binding GoToProfileCommand}"
+                                BackgroundColor="{StaticResource Primary}"
+                                TextColor="White"
+                                CornerRadius="8"
+                                Padding="15"/>
+
+                        <Button Text="📊 Add Health Score"
+                                Clicked="OnAddHealthScoreTapped"
+                                BackgroundColor="{StaticResource Primary}"
+                                TextColor="White"
+                                CornerRadius="8"
+                                Padding="15"/>
+
+                        <Button Text="⚖️ Add Measurement"
+                                Clicked="OnAddMeasurementTapped"
+                                BackgroundColor="{StaticResource Primary}"
+                                TextColor="White"
+                                CornerRadius="8"
+                                Padding="15"/>
+
+                        <Button Text="📚 View Resources"
+                                Clicked="OnViewResourcesTapped"
+                                BackgroundColor="{StaticResource Primary}"
+                                TextColor="White"
+                                CornerRadius="8"
+                                Padding="15"/>
+
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+            </ScrollView>
+        </RefreshView>
     </Grid>
+
+</ContentPage>-->
+
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="T4sV1.Views.Homepage"
+             xmlns:vm="clr-namespace:T4sV1.Model.ViewModels"
+             x:DataType="vm:HomePageViewModel"
+             Title="Dashboard"
+             Shell.NavBarIsVisible="False">
+
+    <!-- Page Background Gradient -->
+    <ContentPage.Background>
+        <LinearGradientBrush EndPoint="0,1">
+            <GradientStop Color="#e9fdb6" Offset="0.1" />
+            <GradientStop Color="#9dc052" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <RefreshView IsRefreshing="{Binding IsLoading}"
+                 Command="{Binding RefreshCommand}"
+                 BackgroundColor="Transparent">
+
+        <ScrollView BackgroundColor="Transparent">
+
+            <VerticalStackLayout Spacing="0">
+
+                <!-- Header with Decorative Nature Elements and Logout -->
+                <Grid HeightRequest="140" BackgroundColor="#b8db88">
+
+                    <!-- Dashboard Title -->
+                    <Label Text="Dashboard"
+                           FontSize="28"
+                           FontAttributes="Bold"
+                           TextColor="#2d5016"
+                           HorizontalOptions="Start"
+                           VerticalOptions="Start"
+                           Margin="20,15,0,0"/>
+
+                    <!-- Logout Button -->
+                    <Button Text="Logout"
+                            BackgroundColor="#F44336"
+                            TextColor="White"
+                            FontSize="14"
+                            FontAttributes="Bold"
+                            CornerRadius="20"
+                            Padding="20,8"
+                            Margin="15"
+                            HorizontalOptions="End"
+                            VerticalOptions="Start"
+                            Command="{Binding LogoutCommand}"/>
+
+                    <!-- Decorative Elements -->
+                    <Label Text="🌲"
+                           FontSize="35"
+                           HorizontalOptions="Start"
+                           VerticalOptions="End"
+                           Margin="25,0,0,8"/>
+                    <Label Text="🏃"
+                           FontSize="55"
+                           HorizontalOptions="Center"
+                           VerticalOptions="End"
+                           Margin="0,0,0,12"/>
+                    <Label Text="🌲"
+                           FontSize="30"
+                           HorizontalOptions="End"
+                           VerticalOptions="End"
+                           Margin="0,0,35,10"/>
+
+                    <!-- Avatar (overlapping) -->
+                    <Frame WidthRequest="100"
+                           HeightRequest="100"
+                           CornerRadius="50"
+                           Padding="3"
+                           BorderColor="White"
+                           BackgroundColor="White"
+                           HasShadow="True"
+                           IsClippedToBounds="True"
+                           HorizontalOptions="Center"
+                           VerticalOptions="End"
+                           Margin="0,0,0,-50">
+                        <Frame.Shadow>
+                            <Shadow Brush="Black" Opacity="0.3" Radius="10" Offset="0,5"/>
+                        </Frame.Shadow>
+                        <Image Source="{Binding ChildAvatar}"
+                               Aspect="AspectFill"/>
+                    </Frame>
+                </Grid>
+
+                <!-- Main Content Card -->
+                <Frame Padding="20"
+                       CornerRadius="20"
+                       BackgroundColor="White"
+                       HasShadow="True"
+                       Margin="15,60,15,15">
+
+                    <VerticalStackLayout Spacing="20">
+
+                        <!-- Loading Indicator -->
+                        <ActivityIndicator IsRunning="{Binding IsLoading}"
+                                         IsVisible="{Binding IsLoading}"
+                                         Color="#2d5016"
+                                         HeightRequest="50"/>
+
+                        <!-- Error Message -->
+                        <Frame IsVisible="{Binding HasError}"
+                               BackgroundColor="#FFEBEE"
+                               BorderColor="#EF5350"
+                               Padding="15"
+                               CornerRadius="12"
+                               HasShadow="False"
+                               Margin="0,0,0,10">
+                            <Label Text="{Binding ErrorMessage}"
+                                   TextColor="#C62828"
+                                   FontSize="14"/>
+                        </Frame>
+
+                        <!-- Child Info Section -->
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="{Binding ChildName}"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="#2d5016"
+                                   HorizontalTextAlignment="Center"/>
+                            <!--<Label Text="{Binding ChildDetails}"
+                                   FontSize="14"
+                                   TextColor="#666"
+                                   HorizontalTextAlignment="Center"/>-->
+
+                            <!-- Change Child Button -->
+                            <!--<Button Text="Change Child"
+                                    Command="{Binding ChangeChildCommand}"
+                                    BackgroundColor="#9dc052"
+                                    TextColor="White"
+                                    FontSize="14"
+                                    FontAttributes="Bold"
+                                    CornerRadius="15"
+                                    Padding="15,10"
+                                    Margin="40,10,40,0"
+                                    HorizontalOptions="Center"/>-->
+                        </VerticalStackLayout>
+
+                        <!-- Content (Only show when child selected) -->
+                        <VerticalStackLayout IsVisible="{Binding HasChild}" Spacing="20">
+
+                            <!-- Quick Stats Section -->
+                            <VerticalStackLayout Spacing="12">
+                                <Label Text="Quick Stats"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="#2d5016"
+                                       Margin="0,10,0,5"/>
+
+                                <!-- Health Score Card -->
+                                <Frame Padding="15,12"
+                                       CornerRadius="12"
+                                       BackgroundColor="#E8F5E9"
+                                       HasShadow="False"
+                                       BorderColor="Transparent">
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnHealthScoreTapped"/>
+                                    </Frame.GestureRecognizers>
+                                    <Grid ColumnDefinitions="Auto,*,Auto">
+                                        <Label Grid.Column="0"
+                                               Text="🏃"
+                                               FontSize="32"
+                                               VerticalOptions="Center"
+                                               Margin="0,0,15,0"/>
+                                        <VerticalStackLayout Grid.Column="1"
+                                                           VerticalOptions="Center"
+                                                           Spacing="2">
+                                            <Label Text="{Binding HealthScoreLabel}"
+                                                   FontSize="12"
+                                                   TextColor="#666"/>
+                                            <Label Text="{Binding HealthScore}"
+                                                   FontSize="20"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#2d5016"/>
+                                        </VerticalStackLayout>
+                                        <Label Grid.Column="2"
+                                               Text="›"
+                                               FontSize="24"
+                                               TextColor="#999"
+                                               VerticalOptions="Center"/>
+                                    </Grid>
+                                </Frame>
+
+                                <!-- Weight Card -->
+                                <Frame Padding="15,12"
+                                       CornerRadius="12"
+                                       BackgroundColor="#E3F2FD"
+                                       HasShadow="False"
+                                       BorderColor="Transparent">
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnMeasurementsTapped"/>
+                                    </Frame.GestureRecognizers>
+                                    <Grid ColumnDefinitions="Auto,*,Auto">
+                                        <Label Grid.Column="0"
+                                               Text="⚖️"
+                                               FontSize="32"
+                                               VerticalOptions="Center"
+                                               Margin="0,0,15,0"/>
+                                        <VerticalStackLayout Grid.Column="1"
+                                                           VerticalOptions="Center"
+                                                           Spacing="2">
+                                            <Label Text="{Binding WeightLabel}"
+                                                   FontSize="12"
+                                                   TextColor="#666"/>
+                                            <Label Text="{Binding Weight}"
+                                                   FontSize="20"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#2d5016"/>
+                                        </VerticalStackLayout>
+                                        <Label Grid.Column="2"
+                                               Text="›"
+                                               FontSize="24"
+                                               TextColor="#999"
+                                               VerticalOptions="Center"/>
+                                    </Grid>
+                                </Frame>
+
+                                <!-- Level Card -->
+                                <Frame Padding="15,12"
+                                       CornerRadius="12"
+                                       BackgroundColor="#FFF3E0"
+                                       HasShadow="False"
+                                       BorderColor="Transparent">
+                                    <Grid ColumnDefinitions="Auto,*">
+                                        <Label Grid.Column="0"
+                                               Text="⭐"
+                                               FontSize="32"
+                                               VerticalOptions="Center"
+                                               Margin="0,0,15,0"/>
+                                        <VerticalStackLayout Grid.Column="1"
+                                                           VerticalOptions="Center"
+                                                           Spacing="2">
+                                            <Label Text="Level"
+                                                   FontSize="12"
+                                                   TextColor="#666"/>
+                                            <Label Text="{Binding Level}"
+                                                   FontSize="20"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#2d5016"/>
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </Frame>
+
+                                <!-- Points Card -->
+                                <Frame Padding="15,12"
+                                       CornerRadius="12"
+                                       BackgroundColor="#F3E5F5"
+                                       HasShadow="False"
+                                       BorderColor="Transparent">
+                                    <Grid ColumnDefinitions="Auto,*">
+                                        <Label Grid.Column="0"
+                                               Text="🎯"
+                                               FontSize="32"
+                                               VerticalOptions="Center"
+                                               Margin="0,0,15,0"/>
+                                        <VerticalStackLayout Grid.Column="1"
+                                                           VerticalOptions="Center"
+                                                           Spacing="2">
+                                            <Label Text="Total Points"
+                                                   FontSize="12"
+                                                   TextColor="#666"/>
+                                            <Label Text="{Binding Points}"
+                                                   FontSize="20"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#2d5016"/>
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </Frame>
+
+                            </VerticalStackLayout>
+
+                            <!-- Quick Actions Section -->
+                            <VerticalStackLayout Spacing="12">
+                                <Label Text="Quick Actions"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="#2d5016"
+                                       Margin="0,10,0,5"/>
+
+                                <!-- View Profile Button -->
+                                <Frame Padding="15,12"
+                                       CornerRadius="12"
+                                       BackgroundColor="#FFF9E6"
+                                       HasShadow="False"
+                                       BorderColor="Transparent">
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding GoToProfileCommand}"/>
+                                    </Frame.GestureRecognizers>
+                                    <Grid ColumnDefinitions="Auto,*,Auto">
+                                        <Label Grid.Column="0"
+                                               Text="📊"
+                                               FontSize="24"
+                                               VerticalOptions="Center"
+                                               Margin="0,0,12,0"/>
+                                        <Label Grid.Column="1"
+                                               Text="View Profile"
+                                               FontSize="15"
+                                               FontAttributes="Bold"
+                                               TextColor="#2d5016"
+                                               VerticalOptions="Center"/>
+                                        <Label Grid.Column="2"
+                                               Text="›"
+                                               FontSize="24"
+                                               TextColor="#999"
+                                               VerticalOptions="Center"/>
+                                    </Grid>
+                                </Frame>
+
+                                <!-- Add Health Score Button -->
+                                <Frame Padding="15,12"
+                                       CornerRadius="12"
+                                       BackgroundColor="#FFF9E6"
+                                       HasShadow="False"
+                                       BorderColor="Transparent">
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnAddHealthScoreTapped"/>
+                                    </Frame.GestureRecognizers>
+                                    <Grid ColumnDefinitions="Auto,*,Auto">
+                                        <Label Grid.Column="0"
+                                               Text="📈"
+                                               FontSize="24"
+                                               VerticalOptions="Center"
+                                               Margin="0,0,12,0"/>
+                                        <Label Grid.Column="1"
+                                               Text="Add Health Score"
+                                               FontSize="15"
+                                               FontAttributes="Bold"
+                                               TextColor="#2d5016"
+                                               VerticalOptions="Center"/>
+                                        <Label Grid.Column="2"
+                                               Text="›"
+                                               FontSize="24"
+                                               TextColor="#999"
+                                               VerticalOptions="Center"/>
+                                    </Grid>
+                                </Frame>
+
+                                <!-- Add Measurement Button -->
+                                <Frame Padding="15,12"
+                                       CornerRadius="12"
+                                       BackgroundColor="#FFF9E6"
+                                       HasShadow="False"
+                                       BorderColor="Transparent">
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnAddMeasurementTapped"/>
+                                    </Frame.GestureRecognizers>
+                                    <Grid ColumnDefinitions="Auto,*,Auto">
+                                        <Label Grid.Column="0"
+                                               Text="⚖️"
+                                               FontSize="24"
+                                               VerticalOptions="Center"
+                                               Margin="0,0,12,0"/>
+                                        <Label Grid.Column="1"
+                                               Text="Add Measurement"
+                                               FontSize="15"
+                                               FontAttributes="Bold"
+                                               TextColor="#2d5016"
+                                               VerticalOptions="Center"/>
+                                        <Label Grid.Column="2"
+                                               Text="›"
+                                               FontSize="24"
+                                               TextColor="#999"
+                                               VerticalOptions="Center"/>
+                                    </Grid>
+                                </Frame>
+
+                                <!-- View Resources Button -->
+                                <Frame Padding="15,12"
+                                       CornerRadius="12"
+                                       BackgroundColor="#FFF9E6"
+                                       HasShadow="False"
+                                       BorderColor="Transparent">
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnViewResourcesTapped"/>
+                                    </Frame.GestureRecognizers>
+                                    <Grid ColumnDefinitions="Auto,*,Auto">
+                                        <Label Grid.Column="0"
+                                               Text="📚"
+                                               FontSize="24"
+                                               VerticalOptions="Center"
+                                               Margin="0,0,12,0"/>
+                                        <Label Grid.Column="1"
+                                               Text="View Resources"
+                                               FontSize="15"
+                                               FontAttributes="Bold"
+                                               TextColor="#2d5016"
+                                               VerticalOptions="Center"/>
+                                        <Label Grid.Column="2"
+                                               Text="›"
+                                               FontSize="24"
+                                               TextColor="#999"
+                                               VerticalOptions="Center"/>
+                                    </Grid>
+                                </Frame>
+
+                            </VerticalStackLayout>
+
+                        </VerticalStackLayout>
+
+                    </VerticalStackLayout>
+
+                </Frame>
+
+            </VerticalStackLayout>
+
+        </ScrollView>
+
+    </RefreshView>
+
 </ContentPage>

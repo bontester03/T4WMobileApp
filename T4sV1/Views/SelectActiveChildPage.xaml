@@ -1,50 +1,228 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage
-    x:Class="T4sV1.Views.SelectActiveChildPage"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:conv="clr-namespace:T4sV1.Converters"
-    Title="Select Active Child">
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="T4sV1.Views.SelectActiveChildPage"
+             xmlns:vm="clr-namespace:T4sV1.Model.ViewModels"
+             xmlns:model="clr-namespace:T4sV1.Model.Children"
+             xmlns:dashboard="clr-namespace:T4sV1.Model.Dashboard"
+             x:DataType="vm:SelectActiveChildViewModel"
+             Title="Select Child"
+             Shell.NavBarIsVisible="False">
 
-    <ContentPage.Resources>
-        <conv:ReferenceEqualityMultiConverter x:Key="RefEq" />
-    </ContentPage.Resources>
+    <!-- Page Background Gradient -->
+    <ContentPage.Background>
+        <LinearGradientBrush EndPoint="0,1">
+            <GradientStop Color="#e9fdb6" Offset="0.1" />
+            <GradientStop Color="#9dc052" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
 
-    <Grid Padding="16" RowDefinitions="Auto,*,Auto" RowSpacing="12">
+    <RefreshView IsRefreshing="{Binding IsBusy}"
+                 Command="{Binding RefreshCommand}"
+                 BackgroundColor="Transparent">
 
-        <Label Text="Pick a child to set as active." />
+        <ScrollView BackgroundColor="Transparent">
 
-        <CollectionView Grid.Row="1"
-                        ItemsSource="{Binding Items}"
-                        SelectionMode="Single"
-                        SelectedItem="{Binding Selected, Mode=TwoWay}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Grid Padding="12" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
-                        <Frame WidthRequest="40" HeightRequest="40" CornerRadius="20" BackgroundColor="#eee" />
-                        <VerticalStackLayout Grid.Column="1">
-                            <Label Text="{Binding ChildName}" FontAttributes="Bold" />
-                            <Label Text="{Binding Age, StringFormat='Age: {0}'}" FontSize="12" Opacity="0.7" />
+            <VerticalStackLayout Spacing="0">
+
+                <!-- Mountain/Nature Header with T4S Logo -->
+                <Grid HeightRequest="100" BackgroundColor="#b8db88">
+
+                    <!-- Decorative Elements (Trees/Mountain) -->
+                    <Label Text="🌲"
+                           FontSize="40"
+                           HorizontalOptions="Start"
+                           VerticalOptions="End"
+                           Margin="30,0,0,10"/>
+                    <Label Text="⛰️"
+                           FontSize="60"
+                           HorizontalOptions="Center"
+                           VerticalOptions="End"
+                           Margin="0,0,0,15"/>
+                    <Label Text="🌲"
+                           FontSize="35"
+                           HorizontalOptions="End"
+                           VerticalOptions="End"
+                           Margin="0,0,40,12"/>
+
+                    <!-- T4S Logo (overlapping) -->
+                    <Frame WidthRequest="100"
+       HeightRequest="100"
+       CornerRadius="50"
+       Padding="5"
+       BorderColor="White"
+       BackgroundColor="White"
+       HasShadow="True"
+       IsClippedToBounds="True"
+       HorizontalOptions="Center"
+       VerticalOptions="End"
+       Margin="0,0,0,-50">
+                        <Frame.Shadow>
+                            <Shadow Brush="Black" Opacity="0.3" Radius="10" Offset="0,5"/>
+                        </Frame.Shadow>
+                        <Image Source="t4slogo.png"
+           Aspect="AspectFit"/>
+                    </Frame>
+                </Grid>
+
+                <!-- Content Card -->
+                <!-- Content Card -->
+                <Frame Padding="20"
+       CornerRadius="20"
+       BackgroundColor="White"
+       HasShadow="True"
+       Margin="15,80,15,15">
+
+                    <VerticalStackLayout Spacing="20">
+
+                        <!-- Header -->
+                        <VerticalStackLayout Spacing="5" Margin="0,5,0,10">
+                           <Label Text="Choose which child to view" 
+                                   FontSize="14" 
+                                   TextColor="#5a7c3e"
+                                   HorizontalOptions="Center"/>
                         </VerticalStackLayout>
 
-                        <!-- ✅ Radio is checked when current item == Selected -->
-                        <RadioButton Grid.Column="2">
-                            <RadioButton.IsChecked>
-                                <MultiBinding Converter="{StaticResource RefEq}">
-                                    <!-- Selected from the page's BindingContext -->
-                                    <Binding Source="{RelativeSource AncestorType={x:Type ContentPage}}"
-                                             Path="BindingContext.Selected" />
-                                    <!-- Current item (.) -->
-                                    <Binding Path="." />
-                                </MultiBinding>
-                            </RadioButton.IsChecked>
-                        </RadioButton>
+                        <!-- Loading Indicator -->
+                        <ActivityIndicator IsRunning="{Binding IsBusy}"
+                                         IsVisible="{Binding IsBusy}"
+                                         Color="#2d5016"
+                                         HeightRequest="50"/>
 
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                        <!-- Children List -->
+                        <CollectionView ItemsSource="{Binding Items}"
+                                      SelectionMode="None"
+                                      BackgroundColor="Transparent"
+                                      IsVisible="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}">
 
-        <Button Grid.Row="2" Text="Set Active" Command="{Binding SaveCommand}" />
-    </Grid>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="dashboard:ChildSummaryDto">
+                                    <Frame Padding="10"
+                                           Margin="0,5"
+                                           CornerRadius="15"
+                                           HasShadow="False"
+                                           BackgroundColor="#FFF9E6"
+                                           BorderColor="Transparent">
+
+                                        <Frame.Triggers>
+                                            <!-- Highlight selected child -->
+                                            <DataTrigger TargetType="Frame" 
+                                                       Binding="{Binding Id}" 
+                                                       Value="{Binding Source={RelativeSource AncestorType={x:Type vm:SelectActiveChildViewModel}}, Path=CurrentId}">
+                                                <Setter Property="BackgroundColor" Value="#E3F2FD" />
+                                                <Setter Property="BorderColor" Value="#2d5016" />
+                                            </DataTrigger>
+                                        </Frame.Triggers>
+
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer 
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SelectActiveChildViewModel}}, Path=SelectCommand}"
+                                                CommandParameter="{Binding .}"/>
+                                        </Frame.GestureRecognizers>
+
+                                        <Grid ColumnDefinitions="80,*,Auto" ColumnSpacing="15">
+
+                                            <!-- Avatar -->
+                                            <Frame Grid.Column="0"
+                                                   WidthRequest="70"
+                                                   HeightRequest="70"
+                                                   CornerRadius="35"
+                                                   Padding="0"
+                                                   HasShadow="False"
+                                                   BorderColor="#9dc052"
+                                                   IsClippedToBounds="True">
+                                                <Image Source="{Binding AvatarUrl, TargetNullValue='dotnet_bot.png'}"
+                                                       Aspect="AspectFill"/>
+                                            </Frame>
+
+                                            <!-- Info -->
+                                            <VerticalStackLayout Grid.Column="1" 
+                                                               VerticalOptions="Center"
+                                                               Spacing="5">
+                                                <Label Text="{Binding FullName}"
+                                                       FontSize="18"
+                                                       FontAttributes="Bold"
+                                                       TextColor="#2d5016"/>
+                                                <Label FontSize="14" TextColor="#5a7c3e">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span Text="{Binding AgeYears}" />
+                                                            <Span Text=" years • " />
+                                                            <Span Text="{Binding TotalPoints}" />
+                                                            <Span Text=" pts" />
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                                <Label FontSize="12" TextColor="Gray">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span Text="Level " />
+                                                            <Span Text="{Binding Level}" FontAttributes="Bold" />
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                            </VerticalStackLayout>
+
+                                            <!-- Selected Indicator -->
+                                            <Label Grid.Column="2"
+                                                   Text="✓"
+                                                   FontSize="28"
+                                                   TextColor="#2d5016"
+                                                   VerticalOptions="Center"
+                                                   IsVisible="False">
+                                                <Label.Triggers>
+                                                    <DataTrigger TargetType="Label" 
+                                                               Binding="{Binding Id}" 
+                                                               Value="{Binding Source={RelativeSource AncestorType={x:Type vm:SelectActiveChildViewModel}}, Path=CurrentId}">
+                                                        <Setter Property="IsVisible" Value="True" />
+                                                    </DataTrigger>
+                                                </Label.Triggers>
+                                            </Label>
+
+                                        </Grid>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+
+                            <!-- Empty State -->
+                            <CollectionView.EmptyView>
+                                <VerticalStackLayout Spacing="20" 
+                                                   Padding="40"
+                                                   VerticalOptions="Center"
+                                                   IsVisible="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}">
+                                    <Label Text="👶" 
+                                           FontSize="60"
+                                           HorizontalOptions="Center"/>
+                                    <Label Text="No children yet" 
+                                           FontSize="20"
+                                           FontAttributes="Bold"
+                                           HorizontalOptions="Center"
+                                           TextColor="#2d5016"/>
+                                    <Label Text="Add your first child to get started" 
+                                           FontSize="14"
+                                           TextColor="#5a7c3e"
+                                           HorizontalOptions="Center"
+                                           HorizontalTextAlignment="Center"/>
+                                    <Button Text="+ Add Child"
+                                            BackgroundColor="#9dc052"
+                                            TextColor="White"
+                                            CornerRadius="15"
+                                            Padding="30,12"
+                                            HorizontalOptions="Center"
+                                            Clicked="OnAddChildClicked"/>
+                                </VerticalStackLayout>
+                            </CollectionView.EmptyView>
+
+                        </CollectionView>
+
+                    </VerticalStackLayout>
+
+                </Frame>
+
+            </VerticalStackLayout>
+
+        </ScrollView>
+
+    </RefreshView>
+
 </ContentPage>

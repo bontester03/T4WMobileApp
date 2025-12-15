@@ -1,7 +1,7 @@
 ﻿using Microsoft.Maui.Storage;
 using System.Text.Json;
-using T4sV1.Model;            // your ISessionService lives here (from your code)
-using T4sV1.Services;          // IAuthService
+using T4sV1.Model;
+using T4sV1.Services;
 using T4sV1.Services.Security;
 
 namespace T4sV1;
@@ -25,7 +25,6 @@ public partial class LoginPage : ContentPage
         Shell.SetNavBarIsVisible(this, false);
     }
 
-    // Prefer commands with async Task, but keeping your signature for now
     private async void OnLoginClicked(object sender, EventArgs e)
     {
         if (_isBusy) return;
@@ -41,6 +40,7 @@ public partial class LoginPage : ContentPage
 
         using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(20));
         _isBusy = true;
+
         try
         {
             if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
@@ -55,19 +55,29 @@ public partial class LoginPage : ContentPage
             if (string.IsNullOrWhiteSpace(result.Id) || string.IsNullOrWhiteSpace(result.Email))
                 throw new InvalidOperationException("Login failed: invalid credentials or incomplete response.");
 
+            // Save session data
             _session.UserId = result.Id;
             _session.Email = result.Email;
             _session.SaveToPreferences();
 
-            try { await SecureStorage.Default.SetAsync("UserId", result.Id); }
-            catch (Exception sse) { System.Diagnostics.Debug.WriteLine($"SecureStorage failed: {sse.Message}"); }
+            try
+            {
+                await SecureStorage.Default.SetAsync("UserId", result.Id);
+            }
+            catch (Exception sse)
+            {
+                System.Diagnostics.Debug.WriteLine($"SecureStorage failed: {sse.Message}");
+            }
 
+            // ✅ FIX: Load AppShell and navigate to SelectActiveChild tab
             Application.Current.MainPage = new AppShell();
-            await DisplayAlert("Success", $"Welcome {result.Email}", "OK");
+            await Shell.Current.GoToAsync("//ActiveChildPage");
+
+            await DisplayAlert("Success", $"Welcome {result.Email}!", "OK");
         }
         catch (TaskCanceledException)
         {
-            await DisplayAlert("Timeout", "The server didn’t respond in time. Please try again.", "OK");
+            await DisplayAlert("Timeout", "The server didn't respond in time. Please try again.", "OK");
         }
         catch (HttpRequestException ex)
         {
@@ -86,6 +96,4 @@ public partial class LoginPage : ContentPage
             _isBusy = false;
         }
     }
-
-
 }
