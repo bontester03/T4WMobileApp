@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="T4sV1.Views.Time4SportAppPrivacyPolicy"
+             Title="Privacy Policy"
+             Shell.NavBarIsVisible="False">
+
+
+    <ScrollView>
+        <ScrollView.Background>
+            <LinearGradientBrush EndPoint="0,1">
+                <GradientStop Color="#e9fdb6" Offset="0.1" />
+                <GradientStop Color="#9dc052" Offset="1.0" />
+            </LinearGradientBrush>
+        </ScrollView.Background>
+
+        <VerticalStackLayout
+            MaximumWidthRequest="420"
+            Spacing="20"
+            Padding="30,50">
+
+            <!-- App Logo -->
+            <Image
+                Source="logo.png"
+                HeightRequest="140"
+                Margin="20"
+                HorizontalOptions="Center" />
+
+            <!-- Privacy Content -->
+            <Label
+                TextColor="Black"
+                FontSize="14"
+                LineBreakMode="WordWrap"
+                Text="
+Time4Sport / Time4Wellbeing – Privacy and Data Protection Policy
+
+We are committed to protecting your privacy and complying with the UK GDPR and Data Protection Act 2018.
+
+This policy explains how we collect, use, store, and protect personal data when you use the Time4Sport and Time4Wellbeing mobile and web applications.
+
+────────────────────────────
+What Data Do We Collect?
+
+We may collect and store the following information:
+
+• Parent / Guardian details – Name, email address, phone number  
+• Child details – Name, date of birth, age, school (if applicable)  
+• Health and wellbeing data – Height, weight, activity scores, wellbeing questionnaires  
+• App usage data – Logins, feature usage, progress tracking  
+• Communication data – Notifications and messages sent via the app  
+
+All data relating to children is handled with the highest level of care and confidentiality.
+
+────────────────────────────
+How Is Your Data Used?
+
+Your data is used solely to:
+
+• Support children’s health, wellbeing, and physical activity tracking  
+• Provide personalised insights, goals, and progress reports  
+• Enable communication between parents, schools, and health professionals (where applicable)  
+• Improve the functionality and effectiveness of our services  
+
+We never sell personal data and do not share it with third parties unless legally required or explicitly agreed.
+
+────────────────────────────
+How Is Data Stored?
+
+All data is securely stored using:
+
+• Encrypted databases  
+• Secure cloud infrastructure hosted within the UK / EU  
+• SSL-protected connections  
+
+Access is strictly limited to authorised personnel who require it to deliver the service.
+
+────────────────────────────
+How Long Is Data Retained?
+
+Personal data is retained only for as long as necessary to deliver our services.
+If an account becomes inactive or is closed, data will be securely deleted in line with our retention policy.
+
+────────────────────────────
+Your Rights
+
+You have the right to:
+
+• Request access to your data  
+• Request correction of inaccurate data  
+• Request deletion of your data  
+• Withdraw consent at any time  
+
+To exercise these rights, please contact us.
+
+────────────────────────────
+Contact Us
+
+Email: support@time4wellbeinguk.com  
+Phone: 01782 409677  
+
+Data Protection Officer  
+Time4Sport UK Ltd
+" />
+
+            <!-- Back Button -->
+            <Button
+                Text="Back"
+                TextColor="White"
+                BackgroundColor="#6b8e23"
+                CornerRadius="12"
+                HeightRequest="45"
+                Clicked="Back_Clicked" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
